@@ -75,12 +75,12 @@ Phase 2:
 We start with A[7] = {42,30,40,-15,15,35,5}.
 We swap the last index with the first: {5,30,40,-15,15,35,42}.
 The new A[0] gets pushed down as long as its value is smaller than one of its childs:
-{5,30,40,-15,15,35,42} -> {30,5,40,-15,15,35,42} -> {30,40,5,-15,15,35,42}.
-Then we swap the i-1 index with the first again: {35,40,5,-15,15,30,42}.
+{5,30,40,-15,15,35,42} -> {30,5,40,-15,15,35,42} -> {30,15,40,-15,5,35,42}.
+Then we swap the i-1 index with the first again: {35,15,40,-15,5,30,42}.
 35 is smaller than than 40, so it gets pushed down:
-{35,40,5,-15,15,30,42} -> {40,35,5,-15,15,30,42}.
-Then we swap the i-2 index with the first: {15,35,5,-15,40,30,42}. 
-15 is smaller than 35, so it gets pushed down: {15,35,5,-15,40,30,42}
+{40,15,35,-15,5,30,42} -> {40,15,42,-15,5,30,35}.
+Then we swap the i-2 index with the first: {5,15,42,-15,40,30,35}.
+15 is smaller than 35, so it gets pushed down: 
 
 */
 int main()
