@@ -72,6 +72,8 @@ Then it checks A[3]. -15 < 15, so it stays. A[4] = 30, 30 > 15, so 30 gets pushe
 After that, we go to A[5], which is 35. 35 < 40, so it stays. A[6] stays as well, since 5 < 40.
 
 Phase 2:
+Klopt geen ruk van, eerst kloppende heap maken.
+
 We start with A[7] = {42,30,40,-15,15,35,5}.
 We swap the last index with the first: {5,30,40,-15,15,35,42}.
 The new A[0] gets pushed down as long as its value is smaller than one of its childs:
@@ -80,7 +82,15 @@ Then we swap the i-1 index with the first again: {35,15,40,-15,5,30,42}.
 35 is smaller than than 40, so it gets pushed down:
 {40,15,35,-15,5,30,42} -> {40,15,42,-15,5,30,35}.
 Then we swap the i-2 index with the first: {5,15,42,-15,40,30,35}.
-15 is smaller than 35, so it gets pushed down: 
+5 is smaller than 15, so it gets pushed down:
+{5,15,42,-15,40,30,35} -> {15,5,42,-15,40,30,35}
+5 is smaller than 40, so it gets pushed down:
+{15,5,42,-15,40,30,35} -> {15,40,42,-15,5,30,35}
+Then we swap the i-3 index with the first {-15,40,42,15,5,30,35}
+-15 is smaller than 40, so it gets pushed down:
+{-15,40,42,15,5,30,35} -> {40,-15,42,15,5,30,35}
+-15 is smaller than 15, so it gets pushed down:
+{40,-15,42,15,5,30,35} -> {40,15,42,-15,5,30,35}
 
 */
 int main()
