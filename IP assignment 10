@@ -48,9 +48,41 @@ Initial tree:
 -15  30  35   5
 
 Phase 1:
+We start at A[0]. We first check A[1]. 40 > 15, so 40 gets pushed up:
+       40
+     /    \
+   15      42
+  /  \    /  \
+-15  30  35   5
+
+Then we check A[2]. 42 > 40, so 42 gets pushed up:
+       42
+     /    \
+   15      40
+  /  \    /  \
+-15  30  35   5
+
+Then it checks A[3]. -15 < 15, so it stays. A[4] = 30, 30 > 15, so 30 gets pushed up:
+       42
+     /    \
+   30      40
+  /  \    /  \
+-15  15  35   5
+
+After that, we go to A[5], which is 35. 35 < 40, so it stays. A[6] stays as well, since 5 < 40.
+
+Phase 2:
+We start with A[7] = {42,30,40,-15,15,35,5}.
+We swap the last index with the first: {5,30,40,-15,15,35,42}.
+The new A[0] gets pushed down as long as its value is smaller than one of its childs:
+{5,30,40,-15,15,35,42} -> {30,5,40,-15,15,35,42} -> {30,40,5,-15,15,35,42}.
+Then we swap the i-1 index with the first again: {35,40,5,-15,15,30,42}.
+35 is smaller than than 40, so it gets pushed down:
+{35,40,5,-15,15,30,42} -> {40,35,5,-15,15,30,42}.
+Then we swap the i-2 index with the first: {15,35,5,-15,40,30,42}. 
+15 is smaller than 35, so it gets pushed down: {15,35,5,-15,40,30,42}
 
 */
-
 int main()
 {
     cout << "beep boop\n";
