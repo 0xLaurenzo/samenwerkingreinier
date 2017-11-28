@@ -1,1 +1,61 @@
+/*
+Assignment 10
+Reinier Sanders,    s4335422
+Laurens Kubat,      s4626249
+*/
 
+#include<iostream>
+
+using namespace std;
+
+/*
+<-- Part 1 -->
+(a)
+3 inputs n, m, o: integers year, day & month.
+Variables that have already been computed, don't need to be computed again.
+So we can just take them as constants when used by other calculations.
+
+O(f(n,m,o))=
+O(a+b+c+d+e+f+g+h+i+K+L+m+month+day)=
+O((n%19)+(n/100)+(n%100)+(b/4)+(b%4)+((b+8)/25)+((b-f+1)/3)+((19*a+b-d-g+15)%30)+(c/4)+(c%4)+((32+2*e+2*i-h-k)%7)+((a+11*h+22*L)/451)+((h+L-7*m+114)/31)+((h+L-7*m+114)%31)+1)=
+O(n+n+n+n+n+n+n+2*n+n+n+3*n+3*n+2*m+2*o)=
+O((17*n)+(2*m)+(2*o))=
+O(n+m+o)
+
+(b)
+2 inputs n, m: integers x & divisor.
+
+We perform a calculation of
+
+O(f(n,m))=
+O(n%m)=
+O(nm)
+
+a square root of n times, so:
+
+O(f(n,m))=
+O(sqrt(n)*(nm))=
+
+<-- Part 2 -->
+(a)
+array = {15, 40, 42, -15, 30, 35, 5}.
+
+Initial tree:
+       15
+     /    \
+   40      42
+  /  \    /  \
+-15  30  35   5
+
+Phase 1:
+
+*/
+
+int main()
+{
+    cout << "beep boop\n";
+    cout << "if(!do_stuff){\n";
+    cout << "\tdo_stuff();\n";
+    cout << "}";
+    return 0;
+}
