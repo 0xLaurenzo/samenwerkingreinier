@@ -1,3 +1,4 @@
+
 /*
 Assignment 10
 Reinier Sanders,    s4335422
@@ -5,6 +6,8 @@ Laurens Kubat,      s4626249
 */
 
 #include<iostream>
+#include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -93,12 +96,125 @@ We swap i - 5 {5,-15,15,30,35,40,42}
 We now have a correct heap
 We swap i - 6 {-15,5,15,30,35,40,42}
 This finishes the algortihm
+
+order of runtime complexity:
+push up: O(f(n)) = O(log(n))
+build_heap: O(f(n)) = O(log(n))
+push_down: O(f(n)) = O(log(n))
+swap: O(f(n)) = O(log(n))
+pick_heap: O(f(n)) = O(log(n))
+
+Operations in a binomial heap are of runtime complexity order O(log(n))
+Thus the runtime complexity order of heap sort is O(log(n)) for an array of n elements.
+Phase 3
 */
-int main()
-{
-    cout << "beep boop\n";
-    cout << "if(!do_stuff){\n";
-    cout << "\tdo_stuff();\n";
-    cout << "}";
+
+bool has_child(int parent, int vectsize) {
+    return parent * 2 < vectsize;
+}
+
+bool is_heap(vector<int> &intvect, int end_of_array) {
+    for (int i = end_of_array; i >= 0; i--) {
+        if (i > (i - 1) / 2) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void push_up(vector<int> &intvect) {
+    int buffer = 0;
+    for (int i = 0; i < intvect.size(); i++) {
+        int child = i;
+        while (intvect[child] > intvect[(child - 1) / 2]) {
+            int parent = (child - 1) / 2;
+            buffer = intvect[parent];
+            intvect[parent] = intvect[child];
+            intvect[child] = buffer;
+            child = parent;
+        }
+    }
+}
+
+void push_down(vector<int> &intvect, int end_of_array) {
+        int buffer = 0;
+        int parent = 0;
+        int child1 = parent * 2 + 1;
+        int child2 = parent * 2 + 2;
+        if (has_child(parent, end_of_array)) {
+
+            while (intvect[parent] < intvect[child1] || has_child(parent, end_of_array - 1) &&
+                    intvect[parent] < intvect[child2]) {
+                cout << "test1" << endl;
+                if (!has_child(parent, end_of_array - 1) || intvect[child1] > intvect[child2]) {
+                    if (intvect[child1] > intvect[parent]) {
+                        buffer = intvect[parent];
+                        intvect[parent] = intvect[child1];
+                        intvect[child1] = buffer;
+                        parent = child1;
+                        child1 = parent * 2 + 1;
+                        child2 = parent * 2 + 2;
+                    }
+                }
+                else if (intvect[child1] < intvect[child2]) {
+                    if (intvect[child2] > intvect[parent]) {
+                        buffer = intvect[parent];
+                        intvect[parent] = intvect[child2];
+                        intvect[child2] = buffer;
+                        parent = child2;
+                        child1 = parent * 2 + 1;
+                        child2 = parent * 2 + 2;
+                    }
+                } else
+                    break;
+            }
+
+    }
+}
+
+void swap(vector<int> &intvect, int &end_of_array) {
+    int buffer = 0;
+    buffer = intvect[0];
+    intvect[0] = intvect[end_of_array];
+    intvect[end_of_array] = buffer;
+    end_of_array--;
+}
+
+void build_heap(vector<int> &intvect) {
+    push_up(intvect);
+}
+
+void pick_heap(vector<int> &intvect) {
+    int end_of_array = intvect.size() - 1;
+    while (end_of_array > 0) {
+        swap(intvect, end_of_array);
+        cout << "swap";
+        for (int i = 0; i < intvect.size(); i++) {
+            cout << intvect[i] << " ";
+        }
+        cout << endl;
+        push_down(intvect, end_of_array);
+        cout << "push_down ";
+        for (int i = 0; i < intvect.size(); i++) {
+            cout << intvect[i] << " ";
+        }
+        cout << endl;
+    }
+}
+
+int main() {
+    vector<int> intvect = {1, 2, 5, 8, 334, -742, 23};
+    build_heap(intvect);
+    cout << "Build heap:" << endl;
+    for (int i = 0; i < intvect.size(); i++) {
+        cout << intvect[i] << " ";
+    }
+    cout << endl;
+    cout << "Pick heap:" << endl;
+    pick_heap(intvect);
+    for (int i = 0; i < intvect.size(); i++) {
+        cout << intvect[i] << " ";
+    }
     return 0;
 }
+
