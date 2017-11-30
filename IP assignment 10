@@ -4,9 +4,11 @@ Reinier Sanders,    s4335422
 Laurens Kubat,      s4626249
 */
 
-#include<iostream>
+#include <iostream>
+#include <fstream>
 #include <vector>
 #include <cmath>
+#include <cassert>
 
 using namespace std;
 
@@ -94,7 +96,7 @@ We now have a correct heap
 We swap i - 5 {5,-15,15,30,35,40,42}
 We now have a correct heap
 We swap i - 6 {-15,5,15,30,35,40,42}
-This finishes the algortihm
+This finishes the algorithm.
 
 order of runtime complexity:
 push up: O(f(n)) = O(log(n))
@@ -107,57 +109,222 @@ Operations in a binomial heap are of runtime complexity order O(log(n))
 Thus the runtime complexity order of heap sort is O(log(n)) for an array of n elements.
 */
 
+// MuziekDB
+struct Length
+{
+    int minutes;
+    int seconds;
+};
+struct Track
+{
+    string artist;
+    string cd;
+    int    year;
+    int    track;
+    string title;
+    string tags;
+    Length time;
+    string country;
+};
+
+vector<Track> vect;
+int counter = 0;
+
+// Operators
+bool operator<(const Length& a, const Length& b)
+{
+    if (a.minutes == b.minutes)
+    {
+        return a.seconds < b.seconds;
+    }
+    return a.minutes < b.minutes;
+}
+
+bool operator==(const Length& a, const Length& b)
+{
+    return (a.minutes == b.minutes && a.seconds == b.seconds);
+}
+
+bool operator<(const Track& a, const Track& b)
+{
+    counter++;
+    if (a.artist < b.artist)
+        return true;
+    if (a.artist == b.artist && a.cd < b.cd)
+        return true;
+    if (a.artist == b.artist && a.cd == b.cd && a.year < b.year)
+        return true;
+    if (a.artist == b.artist && a.cd == b.cd && a.year == b.year && a.track < b.track)
+        return true;
+    return false;
+}
+
+bool operator==(const Track& a, const Track& b)
+{
+    counter++;
+    return (a.artist == b.artist && a.cd == b.cd && a.year == b.year && a.track == b.track);
+}
+
+bool operator>(const Track& a, const Track& b)
+{
+    return b < a ;
+}
+
+bool operator<=(const Track& a, const Track& b)
+{
+    return !(b < a) ;
+}
+
+bool operator>=(const Track& a, const Track& b)
+{
+    return b <= a ;
+}
+
+// File input
+istream& operator>> (istream& in, Length& length)
+{
+    // Precondition:
+    assert (true) ;
+    char colon ;
+    in >> length.minutes >> colon >> length.seconds ;
+    return in ;
+}
+
+ostream& operator<< (ostream& out, const Length length)
+{
+    out << length.minutes << ':' ;
+    if (length.seconds < 10)
+        out << '0' ;
+    out << length.seconds ;
+    return out ;
+}
+
+istream& operator>> (istream& infile, Track& track)
+{
+    string dummy;
+    getline(infile,track.artist);       // artist
+    getline(infile,track.cd);           // cd
+    infile >> track.year ;              // year
+    getline(infile, dummy) ;            // verwijder t/m newline
+    infile >> track.track ;             // track nr
+    getline(infile, dummy) ;            // verwijder t/m newline
+    getline(infile,track.title);        // track title
+    getline(infile,track.tags);         // track tags
+    infile >> track.time ;              // track time
+    getline(infile, dummy) ;            // verwijder t/m newline
+    getline(infile,track.country);      // country
+    getline(infile, dummy) ;            // verwijder t/m newline
+    return infile ;
+}
+
+ostream& operator<< (ostream& out, const Track track)
+{
+    out << track.artist << " " << track.cd << " [" << track.track << "] (" << track.time << ")" ;
+    return out ;
+}
+
+int read_songs(ifstream& infile, vector<Track>& vect)
+{
+    // Precondition:
+    assert(true);
+    // Postcondition:
+    int trackcount = 0;
+    Track buffer;
+    while(!infile.eof())
+    {
+        trackcount = vect.size();
+        infile >> buffer;
+        vect.push_back(buffer);
+    }
+    return trackcount;
+}
+
+int read_file(string filename)
+{
+    // Precondition:
+    assert(true);
+    // Postcondition:
+    ifstream songsDBS (filename.c_str());
+    if (!songsDBS)
+    {
+        cout << "Kon '" << filename << "' niet openen." << endl;
+        return -1;
+    }
+    cout << "Lees '" << filename << "' in." << endl;
+    int amount = read_songs(songsDBS, vect);
+    songsDBS.close();
+    return amount;
+}
+
+void show_MusicDB (vector<Track>& vect, int songAmmount)
+{
+    // Precondition:
+    assert(vect.size() > 0 && songAmmount > 0);
+    // Postcondition:
+    for (int i = 0 ; i < songAmmount; i++)
+        cout << i+1 << ". " << vect[i] << endl ;
+}
+
 bool has_child(int parent, int vectsize)
 {
+    // Precondition:
+    assert(true);
+    // Postcondition:
     return parent * 2 < vectsize;
 }
 
-void push_up(vector<int> &intvect)
+void push_up(vector<Track> &vect)
 {
-    int buffer = 0;
-    for (int i = 0; i < intvect.size(); i++)
+    // Precondition:
+    assert(vect.size() > 0);
+    // Postcondition:
+    Track buffer;
+    for (int i = 0; i < vect.size(); i++)
     {
         int child = i;
-        while (intvect[child] > intvect[(child - 1) / 2])
+        while (vect[child] > vect[(child - 1) / 2])
         {
             int parent = (child - 1) / 2;
-            buffer = intvect[parent];
-            intvect[parent] = intvect[child];
-            intvect[child] = buffer;
+            buffer = vect[parent];
+            vect[parent] = vect[child];
+            vect[child] = buffer;
             child = parent;
         }
     }
 }
 
-void push_down(vector<int> &intvect, int end_of_array)
+void push_down(vector<Track> &vect, int end_of_array)
 {
-    int buffer = 0;
+    // Precondition:
+    assert(vect.size() > 0);
+    // Postcondition:
+    Track buffer;
     int parent = 0;
     int child1 = parent * 2 + 1;
     int child2 = parent * 2 + 2;
 
-    while (has_child(parent, end_of_array) &&(intvect[parent] < intvect[child1] || has_child(parent, end_of_array - 1) &&
-            intvect[parent] < intvect[child2]))
+    while (has_child(parent, end_of_array) &&(vect[parent] < vect[child1] || has_child(parent, end_of_array - 1) &&
+            vect[parent] < vect[child2]))
     {
-        if (has_child(parent, end_of_array - 1) && intvect[child1] > intvect[child2] || !has_child(parent, end_of_array - 1))
+        if (has_child(parent, end_of_array - 1) && vect[child1] > vect[child2] || !has_child(parent, end_of_array - 1))
         {
-            if (intvect[child1] > intvect[parent])
+            if (vect[child1] > vect[parent])
             {
-                buffer = intvect[parent];
-                intvect[parent] = intvect[child1];
-                intvect[child1] = buffer;
+                buffer = vect[parent];
+                vect[parent] = vect[child1];
+                vect[child1] = buffer;
                 parent = child1;
                 child1 = parent * 2 + 1;
                 child2 = parent * 2 + 2;
             }
         }
-        else if (intvect[child1] < intvect[child2])
+        else if (vect[child1] < vect[child2])
         {
-            if (intvect[child2] > intvect[parent])
+            if (vect[child2] > vect[parent])
             {
-                buffer = intvect[parent];
-                intvect[parent] = intvect[child2];
-                intvect[child2] = buffer;
+                buffer = vect[parent];
+                vect[parent] = vect[child2];
+                vect[child2] = buffer;
                 parent = child2;
                 child1 = parent * 2 + 1;
                 child2 = parent * 2 + 2;
@@ -168,57 +335,165 @@ void push_down(vector<int> &intvect, int end_of_array)
     }
 }
 
-void swap(vector<int> &intvect, int &end_of_array)
+void swap(vector<Track> &vect, int &end_of_array)
 {
-    int buffer = 0;
-    buffer = intvect[0];
-    intvect[0] = intvect[end_of_array];
-    intvect[end_of_array] = buffer;
+    // Precondition:
+    assert(vect.size() > 0);
+    // Postcondition:
+    Track buffer;
+    buffer = vect[0];
+    vect[0] = vect[end_of_array];
+    vect[end_of_array] = buffer;
     end_of_array--;
 }
 
-void build_heap(vector<int> &intvect)
+void build_heap(vector<Track> &vect)
 {
-    push_up(intvect);
+    // Precondition:
+    assert(vect.size() > 0);
+    // Postcondition:
+    push_up(vect);
 }
 
-void pick_heap(vector<int> &intvect)
+void pick_heap(vector<Track> &vect)
 {
-    int end_of_array = intvect.size() - 1;
+    // Precondition:
+    assert(vect.size() > 0);
+    // Postcondition:
+    int end_of_array = vect.size() - 1;
     while (end_of_array > 0)
     {
-        swap(intvect, end_of_array);
-        push_down(intvect, end_of_array);
+        swap(vect, end_of_array);
+        push_down(vect, end_of_array);
     }
 }
 
-int main()
-{
-    vector<int> intvect;
-    intvect.push_back(1);
-    intvect.push_back(2);
-    intvect.push_back(5);
-    intvect.push_back(8);
-    intvect.push_back(334);
-    intvect.push_back(-742);
-    intvect.push_back(23);
-    intvect.push_back(84);
-    intvect.push_back(-68);
-    intvect.push_back(38);
-    build_heap(intvect);
-    cout << "Build heap:" << endl;
-    for (int i = 0; i < intvect.size(); i++)
+void read_file_visualise(vector<Track>& vect){
+    // Precondition:
+    assert(true);
+    // Postcondition:
+    ifstream songsDB ("Nummers.txt");
+    if (!songsDB)
     {
-        cout << intvect[i] << " ";
+        cout << "Kon 'Nummers.txt' niet openen." << endl;
+    }
+    read_songs(songsDB, vect);
+}
+
+void visualise_Comparisons(){
+    // Precondition:
+    assert(true);
+    // Postcondition:
+    vector<Track> vect;
+    int maxSongs = 99;
+    int counterOutput = 0;
+    while(maxSongs <= 5599){
+        read_file_visualise(vect);
+        while(vect.size() != maxSongs){
+            vect.pop_back();
+        }
+        build_heap(vect);
+        pick_heap(vect);
+        while(counter > 100000){
+            cout << "*";
+            counter -= 100000;
+        }
+        if(counter > 0)
+            cout << ".";
+        counterOutput += counter;
+        counter = 0;
+        maxSongs += 100;
+        while(!vect.empty()){
+            vect.pop_back();
+        }
+        cout << endl;
+    }
+    cout << endl;
+    cout << "Volledige bestand gesorteerd." << endl;
+    cout << counterOutput << " vergelijkingen gemaakt." << endl;
+}
+
+/*
+Comparisons with insertion, selection and bubble sort algorithms.
+We can clearly see that heap sort is way more efficient than the other three algorithms, just by looking at the amount of comparisons made:
+
+Insertion:          31597885 comparisons.
+Selection:          15806253 comparisons.
+Bubble:               402228 comparisons.
+Heap:                 259931 comparisons.
+Improved Insertion:    10891 comparisons.
+
+As shown, it only gets trumped by the improved insertion sort algorithm from last week.
+Heap sort is more efficient since it makes less comparisons. It only has to shuffle around values using internal buffers, so it only makes comparisons when it
+absolutely has to, instead of with every step.
+*/
+
+int main(){
+    /*
+    Vector test values:
+    vect.push_back(1);
+    vect.push_back(2);
+    vect.push_back(5);
+    vect.push_back(8);
+    vect.push_back(334);
+    vect.push_back(-742);
+    vect.push_back(23);
+    vect.push_back(84);
+    vect.push_back(-68);
+    vect.push_back(38);
+    */
+
+    int songAmount = read_file("Nummers.txt");
+    int choice;
+    char visual;
+    cout << songAmount << " nummers gevonden." << endl;
+    cout << endl;
+    cout << "Wil je:" << endl;
+    cout << "[1] nummers sorteren?" << endl;
+    cout << "[2] aantal vergelijkingen weergeven?" << endl;
+    cin >> choice;
+    cout << endl;
+    if(choice == 1){
+        cout << "Wil je de database ook weergeven? [Y]es / [N]o." << endl;
+        cin >> visual;
+        cout << endl;
+        if(visual == 'y' || visual == 'Y'){
+            build_heap(vect);
+            pick_heap(vect);
+            show_MusicDB(vect, songAmount);
+            cout << endl;
+            cout << "Nummers gesorteerd." << endl;
+            cout << counter << " vergelijkingen gemaakt." << endl;
+            return 0;
+        }
+        build_heap(vect);
+        pick_heap(vect);
+        cout << "Nummers gesorteerd." << endl;
+        cout << counter << " vergelijkingen gemaakt." << endl;
+        return 0;
+    }
+    visualise_Comparisons();
+    return 0;
+
+    /*
+    cout << "Build heap:" << endl;
+    build_heap(vect);
+    for (int i = 0; i < vect.size(); i++)
+    {
+        cout << vect[i] << " ";
     }
     cout << endl;
     cout << endl;
     cout << "Pick heap:" << endl;
-    pick_heap(intvect);
-    for (int i = 0; i < intvect.size(); i++)
+    pick_heap(vect);
+    for (int i = 0; i < vect.size(); i++)
     {
-        cout << intvect[i] << " ";
+        cout << vect[i] << " ";
     }
     cout << endl;
-    return 0;
+    show_MusicDB(vect, songAmount);
+    cout << endl;
+    cout << "Nummers gesorteerd." << endl;
+    cout << counter << " vergelijkingen gemaakt." << endl;
+    */
 }
