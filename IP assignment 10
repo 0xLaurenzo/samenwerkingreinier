@@ -105,24 +105,11 @@ pick_heap: O(f(n)) = O(log(n))
 
 Operations in a binomial heap are of runtime complexity order O(log(n))
 Thus the runtime complexity order of heap sort is O(log(n)) for an array of n elements.
-Phase 3
 */
 
 bool has_child(int parent, int vectsize)
 {
     return parent * 2 < vectsize;
-}
-
-bool is_heap(vector<int> &intvect, int end_of_array)
-{
-    for (int i = end_of_array; i >= 0; i--)
-    {
-        if (i > (i - 1) / 2)
-        {
-            return false;
-        }
-    }
-    return true;
 }
 
 void push_up(vector<int> &intvect)
@@ -233,9 +220,5 @@ int main()
         cout << intvect[i] << " ";
     }
     cout << endl;
-    if(is_heap(intvect, intvect.size())){
-        cout << "Vector sorted!" << endl;
-        cout << endl;
-    }
     return 0;
 }
