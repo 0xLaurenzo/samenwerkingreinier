@@ -23,7 +23,7 @@ double power(double base, int exponent){
 
 double better_power(double base, int exponent) {
     assert(exponent >= 0 );
-
+    double buffer = 0;
     double result = 0;
     if (exponent == 0){
         result = 1;
@@ -31,11 +31,13 @@ double better_power(double base, int exponent) {
     }
     if (exponent % 2 == 0 ){
         exponent = exponent / 2;
-        result = better_power(base, exponent) * better_power(base, exponent);
+        buffer = better_power(base, exponent);
+        result = buffer * buffer;
         return result;
     }
     exponent = exponent / 2;
-    result = base * better_power(base, exponent) * better_power(base, exponent);
+    buffer = better_power(base, exponent);
+    result = base * buffer * buffer;
     return result;
 }
 // Runtime order to be added.
@@ -67,7 +69,9 @@ bool palindrome3 (string text, int i, int j){
     for (int i = 0; i < text.length(); i++){
         text[i] = tolower(text[i]);
         if (ispunct(text[i])){
+            cout << "punctuation found.";
             text.erase(i);
+            j--;
         }
     }
     if (text[i] != text[j]){
