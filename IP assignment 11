@@ -8,9 +8,9 @@ using namespace std;
    Laurens Kubat,      s4626249
  */
 double power(double base, int exponent){
-    // preconditions
+    // Preconditions:
     assert(exponent >= 0);
-    // postconditions the result is recursively multiplied by its own base until the exponent reaches 0.
+    // Postconditions: the result is recursively multiplied by its own base until the exponent reaches 0.
     double result = 0;
     if (exponent == 0){
         result = 1;
@@ -18,11 +18,16 @@ double power(double base, int exponent){
     else{
         result = base * power(base, exponent - 1);
     }
-    return  result;
+    return result;
 }
+// Run-time order complexity: O(n) (you multiply the base n times).
 
 double better_power(double base, int exponent) {
+    // Precondition:
     assert(exponent >= 0 );
+    /* Postcondition: if exponent is 0, the result is always 1. If the exponent is even, divide it by 2 and multiply the base
+       to the power of the new exponent twice. If the exponent is odd, do the same as the previous, but multiply it with the
+       base once more in order to end up with the original odd exponent. */
     double buffer = 0;
     double result = 0;
     if (exponent == 0){
@@ -40,7 +45,17 @@ double better_power(double base, int exponent) {
     result = base * buffer * buffer;
     return result;
 }
-// Runtime order to be added.
+/*  Run-time order complexity: since we first divide the exponent by 2 and multiply those results once, instead of doing the full
+    n times of calculations, we reduce the amount of calculations from n to sqrt(n) times. Example: take 2^16 as input. Normally,
+    we would multiply 2 with itself 16 times. Now we first divide the exponent in this way:
+    Result: 2^16    (Total #calculations)
+    = 2^8 * 2^8     (1 calculation)
+    = 2^4 * 2^4     (2 calculations)
+    = 2^2 * 2^2     (3 calculations)
+    = 2 * 2         (4 calculations = sqrt(16))
+    So the run-time order complexity is O(sqrt(n)).
+    If the exponent is odd, we do 1 more multiplication so the run-time order complexity becomes O(1 + sqrt(n)), but this is
+    equal to O(sqrt(n)), so it does not matter whether the exponent is even or odd. */
 
 bool palindrome1(string text, int i, int j){
     if (text[i] != text[j]){
