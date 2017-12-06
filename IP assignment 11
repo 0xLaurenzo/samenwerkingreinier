@@ -99,12 +99,18 @@ bool palindrome3 (string text, int i, int j){
 }
 
 bool match_chars(string chars, int i, string source, int j){
-    for (int v = j; v < source.length(); v++){
-        if (chars[i] == source[v]){
-            
+    for (int v = j; v < source.length(); v++) {
+        if (chars[i] == source[v]) {
+            if (i < chars.length()) {
+                j = v;
+                match_chars(chars, i + 1, source, j + 1);
+            }
         }
     }
-}
+    if (i + 1 == chars.length()){
+        return true;
+    }
+    return false;
 
 int main() {
     cout << power(2, 6) << endl;
