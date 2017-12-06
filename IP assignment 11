@@ -8,9 +8,9 @@ using namespace std;
    Laurens Kubat,      s4626249
  */
 double power(double base, int exponent){
-    // Preconditions:
+    // Precondition:
     assert(exponent >= 0);
-    // Postconditions: the result is recursively multiplied by its own base until the exponent reaches 0.
+    // Postcondition: the result is recursively multiplied by its own base until the exponent reaches 0.
     double result = 0;
     if (exponent == 0){
         result = 1;
@@ -58,6 +58,9 @@ double better_power(double base, int exponent) {
     equal to O(sqrt(n)), so it does not matter whether the exponent is even or odd. */
 
 bool palindrome1(string text, int i, int j){
+    // Precondition:
+    assert(text.lentgh() > 0);
+    // Postcondition:
     if (text[i] != text[j]){
         return false;
     }
@@ -68,6 +71,9 @@ bool palindrome1(string text, int i, int j){
 }
 
 bool palindrome2 (string text, int i, int j){
+    // Precondition:
+    assert(text.lentgh() > 0);
+    // Postcondition:
     for (int i = 0; i < text.length(); i++){
         text[i] = tolower(text[i]);
     }
@@ -81,10 +87,12 @@ bool palindrome2 (string text, int i, int j){
 }
 
 bool palindrome3 (string text, int i, int j){
+    // Precondition:
+    assert(text.lentgh() > 0);
+    // Postcondition:
     for (int i = 0; i < text.length(); i++){
         text[i] = tolower(text[i]);
         if (ispunct(text[i])){
-            cout << "punctuation found.";
             text.erase(i);
             j--;
         }
@@ -99,24 +107,32 @@ bool palindrome3 (string text, int i, int j){
 }
 
 bool match_chars(string chars, int i, string source, int j){
-    for (int v = j; v < source.length(); v++) {
-        if (chars[i] == source[v]) {
-            if (i < chars.length()) {
-                j = v;
-                match_chars(chars, i + 1, source, j + 1);
+    // Precondition:
+    assert(chars.lentgh() > 0 && source.length() > 0);
+    // Postcondition:
+    for(i; i < chars.length(); i++){
+        for(j; j < source.length(); j++){
+            chars[i] = tolower(chars[i]);
+            source[j] = tolower(source[j]);
+            if(chars[i] == source[j]){
+                i++;
+                j++;
+                if(i == chars.length()){
+                    return true;
+                }
+                match_chars(chars, i, source, j);
             }
         }
     }
-    if (i + 1 == chars.length()){
-        return true;
-    }
     return false;
+}
 
 int main() {
-    cout << power(2, 6) << endl;
-    cout << better_power(3.5, 5) << endl;
-    cout << palindrome1("Otto", 0, 3) << endl;
-    cout << palindrome2("Otto", 0, 3) << endl;
-    cout << palindrome3("Madam, I'm Adam.", 0, 15);
+    cout << "Power: " << power(2, 6) << endl;
+    cout << "Better power: " << better_power(3.5, 5) << endl;
+    cout << "Palindrome1: " << palindrome1("Otto", 0, 3) << endl;
+    cout << "Palindrome2: " << palindrome2("Otto", 0, 3) << endl;
+    cout << "Palindrome3: " << palindrome3("Madam, I'm Adam.", 0, 15) << endl;;
+    cout << "Match characters: " << match_chars("abc", 0, "It is a bag of cards", 0) << endl;;
     return 0;
 }
