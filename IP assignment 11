@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cassert>
+#include <string>
 using namespace std;
 
 /* assignment 11
@@ -37,10 +38,49 @@ double better_power(double base, int exponent) {
     result = base * better_power(base, exponent) * better_power(base, exponent);
     return result;
 }
+// Runtime order to be added.
 
+bool palindrome1(string text, int i, int j){
+    if (text[i] != text[j]){
+        return false;
+    }
+    if (i < j) {
+        palindrome1(text, i - 1, j - 1);
+    }
+    return true;
+}
+
+bool palindrome2 (string text, int i, int j){
+    for (int i = 0; i < text.length(); i++){
+        text[i] = tolower(text[i]);
+    }
+    if (text[i] != text[j]){
+        return false;
+    }
+    if (i < j) {
+        palindrome1(text, i - 1, j - 1);
+    }
+    return true;
+}
+
+bool palindrome3 (string text, int i, int j){
+    vector<string> punctuation = {};
+    for (int i = 0; i < text.length(); i++){
+        text[i] = tolower(text[i]);
+    }
+    if (text[i] != text[j]){
+        return false;
+    }
+    if (i < j) {
+        palindrome1(text, i - 1, j - 1);
+    }
+    return true;
+}
 
 int main() {
     cout << power(2, 6) << endl;
-    cout << better_power(3.5, 5);
+    cout << better_power(3.5, 5) << endl;
+    cout << palindrome1("Otto", 0, 3) << endl;
+    cout << palindrome2("Otto", 0, 3) << endl;
     return 0;
 }
