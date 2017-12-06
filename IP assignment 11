@@ -59,7 +59,7 @@ double better_power(double base, int exponent) {
 
 bool palindrome1(string text, int i, int j){
     // Precondition:
-    assert(text.lentgh() > 0);
+    assert(text.length() > 0);
     // Postcondition:
     if (text[i] != text[j]){
         return false;
@@ -72,7 +72,7 @@ bool palindrome1(string text, int i, int j){
 
 bool palindrome2 (string text, int i, int j){
     // Precondition:
-    assert(text.lentgh() > 0);
+    assert(text.length() > 0);
     // Postcondition:
     for (int i = 0; i < text.length(); i++){
         text[i] = tolower(text[i]);
@@ -88,7 +88,7 @@ bool palindrome2 (string text, int i, int j){
 
 bool palindrome3 (string text, int i, int j){
     // Precondition:
-    assert(text.lentgh() > 0);
+    assert(text.length() > 0);
     // Postcondition:
     for (int i = 0; i < text.length(); i++){
         text[i] = tolower(text[i]);
@@ -108,7 +108,7 @@ bool palindrome3 (string text, int i, int j){
 
 bool match_chars(string chars, int i, string source, int j){
     // Precondition:
-    assert(chars.lentgh() > 0 && source.length() > 0);
+    assert(chars.length() > 0 && source.length() > 0);
     // Postcondition:
     for(i; i < chars.length(); i++){
         for(j; j < source.length(); j++){
