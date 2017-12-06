@@ -64,9 +64,11 @@ bool palindrome2 (string text, int i, int j){
 }
 
 bool palindrome3 (string text, int i, int j){
-    vector<string> punctuation = {};
     for (int i = 0; i < text.length(); i++){
         text[i] = tolower(text[i]);
+        if (ispunct(text[i])){
+            text.erase(i);
+        }
     }
     if (text[i] != text[j]){
         return false;
@@ -82,5 +84,6 @@ int main() {
     cout << better_power(3.5, 5) << endl;
     cout << palindrome1("Otto", 0, 3) << endl;
     cout << palindrome2("Otto", 0, 3) << endl;
+    cout << palindrome3("Madam, I'm Adam.", 0, 15);
     return 0;
 }
