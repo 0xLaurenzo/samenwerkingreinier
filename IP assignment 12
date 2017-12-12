@@ -1,0 +1,80 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <vector>
+
+using namespace std;
+
+struct Gifts {
+    int price;
+    string item;
+};
+
+
+
+istream& operator>> (istream& in, Gifts& gifts){
+    in >> gifts.price;
+    getline(in, gifts.item);
+    return in;
+}
+
+void enter_filename(ifstream& file){
+    string filename;
+    cout << "enter a filename";
+    cin >> filename;
+    file.open(filename);
+}
+
+int  read_gift_store(vector<Gifts>& items){
+    ifstream file;
+    file.open("giftstore.txt");
+    if (!file.is_open()){
+        return 1;
+    }
+    while (file) {
+        Gifts gift;
+        file >> gift;
+        items.push_back(gift);
+    }
+    return 0;
+}
+
+int read_wishlist(vector<string>& items, ifstream& file, int& budget){
+    if (!file.is_open()){
+        return 1;
+    }
+    file >> budget;
+    while (file){
+        string wish;
+        getline(file, wish);
+        items.push_back(wish);
+    }
+    return 0;
+}
+
+int gifts(vector<string>wishlist, int &budget, vector<Gifts>store, int wishlist_index, int& total_price){
+    if (budget <=0){
+        return total_price;
+    }
+    for (int i = 0; i < store.size(); i++){
+        if (wishlist[0] == store[i].item){
+            budget =- store[i].price;
+            total_price =+ store[i].price;
+        }
+    }
+    gifts(wishlist, budget, store, wishlist_index + 1, total_price);
+
+}
+
+int main() {
+    ifstream wishlist_file;
+    vector<string> wishlist;
+    vector<Gifts> store;
+    int budget = 0;
+    int total_price = 0;
+    enter_filename(wishlist_file);
+    read_gift_store(store);
+    read_wishlist(wishlist, wishlist_file, budget);
+    gifts(wishlist, budget, store, budget, total_price);
+    return 0;
+}
