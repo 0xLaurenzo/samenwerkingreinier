@@ -52,27 +52,31 @@ int read_wishlist(vector<string>& items, ifstream& file, int& budget){
     return 0;
 }
 
-int gifts(vector<string>wishlist, int &budget, vector<Gifts>store, int wishlist_index, int& total_price){
+int gifts(vector<string>wishlist, int& budget, vector<Gifts>store, int wishlist_index, int& total_price){
     if (budget == 0){
         cout << "budget is 0\n";
         cout << total_price << "is the total price\n";
         return total_price;
     }
     if (budget < 0) {
-        for (int i = 0; i < store.size(); i++) {
-            if (wishlist[wishlist_index] == store[i].item) {
+        for (int i = 0; i < store.size() - 1; i++) {
+            if (wishlist[wishlist_index - 1] == store[i].item) {
                 total_price -= store[i].price;
             }
         }
         cout << "budget is lower than 0\n" << total_price << " is the total price\n";
         return  total_price;
     }
-    for (int i = 0; i < store.size(); i++){
+    for (int i = 0; i < store.size() - 1; i++){
         if (wishlist[wishlist_index] == store[i].item){
+            cout << "The old budget is:"<< budget;
             budget -= store[i].price;
             total_price += store[i].price;
+            cout << "The new budget is:\t" << budget << endl;
+            cout << "The total price is:\t" << total_price << endl;
         }
     }
+    cout << "next recursion";
     gifts(wishlist, budget, store, wishlist_index + 1, total_price);
 
 }
@@ -87,6 +91,14 @@ int main() {
     read_gift_store(store);
     read_wishlist(wishlist, wishlist_file, budget);
     cout << budget;
+    cout << "The store is:\n";
+    cout << "price\t item\n";
+    for (int i = 0; i < store.size() - 1; i++){
+        cout << store[i].price << "\t" << store[i].item << endl;
+    }
+    for (int i = 0; i < wishlist.size(); i++){
+        cout << wishlist[i] << endl;
+    }
     gifts(wishlist, budget, store, budget, total_price);
     cout << total_price;
     return 0;
