@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string>
+#include <cassert>
 #include <fstream>
 #include <vector>
 
@@ -13,19 +13,27 @@ struct Gifts {
 
 
 istream& operator>> (istream& in, Gifts& gifts){
+    char c;
     in >> gifts.price;
+    in.get(c);
     getline(in, gifts.item);
     return in;
 }
 
 void enter_filename(ifstream& file){
+    //preconditions:
+    assert(true);
+    //postconditions: allows the user to enter a filename of a wishlist and opens this wishlist.
     string filename;
-    cout << "enter a filename";
+    cout << "enter a filename of a wishlist: \t";
     cin >> filename;
     file.open(filename);
 }
 
 int  read_gift_store(vector<Gifts>& items){
+    //preconditions:
+    assert(items.empty());
+    //postconditions:opens and reads the giftstore file.
     ifstream file;
     file.open("giftstore.txt");
     if (!file.is_open()){
@@ -40,10 +48,15 @@ int  read_gift_store(vector<Gifts>& items){
 }
 
 int read_wishlist(vector<string>& items, ifstream& file, int& budget){
+    //preconditions:
+    assert(items.empty());
+    //preconditions reads the budget and items in the wishlist and places them in a vector
     if (!file.is_open()){
         return 1;
     }
+    string c;
     file >> budget;
+    getline(file, c);
     while (file){
         string wish;
         getline(file, wish);
@@ -53,22 +66,23 @@ int read_wishlist(vector<string>& items, ifstream& file, int& budget){
 }
 
 int gifts(vector<string>wishlist, int& budget, vector<Gifts>store, int wishlist_index, int& total_price){
-    if (budget == 0){
-        cout << "budget is 0\n";
-        cout << total_price << "is the total price\n";
-        return total_price;
-    }
+    // preconditions
+    assert(wishlist_index >= 0);
+    // postconditions: This function iterates recursively through the wishlist and and checks for each item if the budget
+    // is lower than the price corresponding item from the store. If it is, the budget and the total price are adjusted
+    // There are two base cases in this function. one returns 0 and one returns 1. The base case that returns 1 should
+    // never be reached
     if (budget < 0) {
-        for (int i = 0; i < store.size() - 1; i++) {
-            if (wishlist[wishlist_index - 1] == store[i].item) {
-                total_price -= store[i].price;
-            }
-        }
         cout << "budget is lower than 0\n" << total_price << " is the total price\n";
-        return  total_price;
+        return  1;
+    }
+    if (wishlist_index > wishlist.size()){
+        cout << wishlist_index << endl;
+        cout << "out of bounds termination";
+        return 0;
     }
     for (int i = 0; i < store.size() - 1; i++){
-        if (wishlist[wishlist_index] == store[i].item){
+        if (wishlist[wishlist_index] == store[i].item && budget > store[i].price){
             cout << "The old budget is:"<< budget;
             budget -= store[i].price;
             total_price += store[i].price;
@@ -76,9 +90,7 @@ int gifts(vector<string>wishlist, int& budget, vector<Gifts>store, int wishlist_
             cout << "The total price is:\t" << total_price << endl;
         }
     }
-    cout << "next recursion";
     gifts(wishlist, budget, store, wishlist_index + 1, total_price);
-
 }
 
 int main() {
@@ -98,8 +110,11 @@ int main() {
     }
     for (int i = 0; i < wishlist.size(); i++){
         cout << wishlist[i] << endl;
+        cout << i << endl;
     }
-    gifts(wishlist, budget, store, budget, total_price);
+    cout << "The wishlist size is: " << wishlist.size() << endl;
+    cout << budget << endl;
+    gifts(wishlist, budget, store, 0, total_price);
     cout << total_price;
     return 0;
 }
