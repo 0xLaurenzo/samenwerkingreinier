@@ -53,13 +53,24 @@ int read_wishlist(vector<string>& items, ifstream& file, int& budget){
 }
 
 int gifts(vector<string>wishlist, int &budget, vector<Gifts>store, int wishlist_index, int& total_price){
-    if (budget <=0){
+    if (budget == 0){
+        cout << "budget is 0\n";
+        cout << total_price << "is the total price\n";
         return total_price;
     }
+    if (budget < 0) {
+        for (int i = 0; i < store.size(); i++) {
+            if (wishlist[wishlist_index] == store[i].item) {
+                total_price -= store[i].price;
+            }
+        }
+        cout << "budget is lower than 0\n" << total_price << " is the total price\n";
+        return  total_price;
+    }
     for (int i = 0; i < store.size(); i++){
-        if (wishlist[0] == store[i].item){
-            budget =- store[i].price;
-            total_price =+ store[i].price;
+        if (wishlist[wishlist_index] == store[i].item){
+            budget -= store[i].price;
+            total_price += store[i].price;
         }
     }
     gifts(wishlist, budget, store, wishlist_index + 1, total_price);
@@ -75,6 +86,8 @@ int main() {
     enter_filename(wishlist_file);
     read_gift_store(store);
     read_wishlist(wishlist, wishlist_file, budget);
+    cout << budget;
     gifts(wishlist, budget, store, budget, total_price);
+    cout << total_price;
     return 0;
 }
