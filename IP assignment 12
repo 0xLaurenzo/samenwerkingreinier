@@ -25,7 +25,7 @@ void enter_filename(ifstream& file){
     assert(true);
     //postconditions: allows the user to enter a filename of a wishlist and opens this wishlist.
     string filename;
-    cout << "enter a filename of a wishlist: \t";
+    cout << "enter a filename of a wishlist: ";
     cin >> filename;
     file.open(filename);
 }
@@ -42,7 +42,9 @@ int  read_gift_store(vector<Gifts>& items){
     while (file) {
         Gifts gift;
         file >> gift;
-        items.push_back(gift);
+        if (gift.item != ""){
+            items.push_back(gift);
+        }
     }
     return 0;
 }
@@ -60,12 +62,14 @@ int read_wishlist(vector<string>& items, ifstream& file, int& budget){
     while (file){
         string wish;
         getline(file, wish);
-        items.push_back(wish);
+        if (wish != "") {
+            items.push_back(wish);
+        }
     }
     return 0;
 }
 
-int gifts(vector<string>wishlist, int& budget, vector<Gifts>store, int wishlist_index, int& total_price){
+int gifts_first_to_fit(vector<string>wishlist, int& budget, vector<Gifts>store, int wishlist_index, int& total_price){
     // preconditions
     assert(wishlist_index >= 0);
     // postconditions: This function iterates recursively through the wishlist and and checks for each item if the budget
@@ -78,43 +82,83 @@ int gifts(vector<string>wishlist, int& budget, vector<Gifts>store, int wishlist_
     }
     if (wishlist_index > wishlist.size()){
         cout << wishlist_index << endl;
-        cout << "out of bounds termination";
         return 0;
     }
     for (int i = 0; i < store.size() - 1; i++){
         if (wishlist[wishlist_index] == store[i].item && budget > store[i].price){
-            cout << "The old budget is:"<< budget;
+            cout << "The old budget is: "<< budget;
             budget -= store[i].price;
             total_price += store[i].price;
             cout << "The new budget is:\t" << budget << endl;
             cout << "The total price is:\t" << total_price << endl;
         }
     }
-    gifts(wishlist, budget, store, wishlist_index + 1, total_price);
+    gifts_first_to_fit(wishlist, budget, store, wishlist_index + 1, total_price);
+}
+void wishlist_clean_up(vector<string>& wishlist){
+    for (int i; i < wishlist.size(); i++){
+        if (wishlist[i] == "")
+            wishlist.erase(wishlist.begin() + i);
+    }
+}
+void wishlist_pricing(vector<string> wishlist, vector<Gifts> store, vector<int>& pricing){
+    for (int i = 0; i < wishlist.size(); i++) {
+        for (int j = 0; j < store.size(); j++) {
+            if (wishlist[i] == store[j].item){
+                pricing.push_back(store[j].price);
+            }
+        }
+    }
+}
+
+
+int gifts(vector<string> wishlist, vector<int> prices,vector<string>& gifts_given, int wishlist_index, int& total_price, int budget) {
+    int current_price = 0;
+    vector<string> current_gifts;
+    if (wishlist_index == wishlist.size()) {
+        return 0;
+    }
+    current_price += prices[wishlist_index];
+    current_gifts.push_back(wishlist[wishlist_index]);
+    for (int i = 0; i < wishlist_index; i++) {
+        if (current_price + prices[i] <= budget) {
+            current_price += prices[i];
+            current_gifts.push_back(wishlist[i]);
+        }
+    }
+    for (int i = wishlist_index; i < wishlist.size(); i++) {
+        if (current_price + prices[i] <= budget) {
+            current_price += prices[i];
+            current_gifts.push_back(wishlist[i]);
+        }
+    }
+    if (current_price > total_price && current_price <= budget) {
+        total_price = current_price;
+        while (!gifts_given.empty()){
+            gifts_given.pop_back();
+        }
+    }
+    cout << total_price << endl;
+    gifts(wishlist, prices, gifts_given, wishlist_index + 1, total_price, budget);
 }
 
 int main() {
     ifstream wishlist_file;
     vector<string> wishlist;
     vector<Gifts> store;
+    vector<int> prices;
+    vector<string> gifts_to_be_given;
     int budget = 0;
     int total_price = 0;
     enter_filename(wishlist_file);
     read_gift_store(store);
     read_wishlist(wishlist, wishlist_file, budget);
-    cout << budget;
-    cout << "The store is:\n";
-    cout << "price\t item\n";
-    for (int i = 0; i < store.size() - 1; i++){
-        cout << store[i].price << "\t" << store[i].item << endl;
-    }
-    for (int i = 0; i < wishlist.size(); i++){
-        cout << wishlist[i] << endl;
-        cout << i << endl;
-    }
-    cout << "The wishlist size is: " << wishlist.size() << endl;
+    wishlist_clean_up(wishlist);
+    wishlist_pricing(wishlist, store, prices);
+    cout << wishlist.size() << endl;
+    cout << prices.size() << endl;
     cout << budget << endl;
-    gifts(wishlist, budget, store, 0, total_price);
+    cout << gifts(wishlist, prices, gifts_to_be_given, 0, total_price, budget) << endl;
     cout << total_price;
     return 0;
 }
