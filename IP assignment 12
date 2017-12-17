@@ -6,17 +6,20 @@
 using namespace std;
 
 struct Gifts {
+    int stock;
     int price;
     string item;
 };
 
 struct Wishlist {
+    int stock
     int price;
     string item;
 };
 
 istream& operator>> (istream& in, Gifts& gifts){
     char c;
+    in >> gifts.stock;
     in >> gifts.price;
     in.get(c);
     getline(in, gifts.item);
@@ -80,6 +83,7 @@ void wishlist_pair(vector<string> old_list, vector<Wishlist>& wishlist, vector<G
     for(int i = 0; i < old_list.size(); i++){
         for(int j = 0; j < store.size(); j++){
             if(old_list[i] == store[j].item){
+                stuff.stock = store[j].stock;
                 stuff.price = store[j].price;
                 stuff.item = old_list[i];
                 wishlist.push_back(stuff);
@@ -88,10 +92,12 @@ void wishlist_pair(vector<string> old_list, vector<Wishlist>& wishlist, vector<G
     }
 }
 
-int gifts(vector<Wishlist> wishlist, int wishlist_index, int total_price, int budget, int& answer) {
+int gifts(vector<Wishlist> wishlist, int wishlist_index, int total_price, int budget, int& answer,
+          vector<Wishlist>& possible_gifts) {
     assert(!wishlist.empty());
     // postconditions, this function tests what the combination in the wishlist is, with the highest combined amount
     // which fits int the budget
+    vector<Wishlist> current_gifts;
     int current_price = 0;
     int total_price_buffer = 0;
     if (wishlist_index == wishlist.size()) {
@@ -99,18 +105,29 @@ int gifts(vector<Wishlist> wishlist, int wishlist_index, int total_price, int bu
     }
     current_price += wishlist[wishlist_index].price;
     for (int i = wishlist_index; i < wishlist.size(); i++) {
-        if (current_price + wishlist[i].price <= budget) {
+        if (current_price + wishlist[i].price <= budget && wishlist[i].stock > 0) {
+            current_gifts.push_back(wishlist.[i]);
             current_price += wishlist[i].price;
         }
     }
     if (current_price > total_price && current_price <= budget) {
         total_price = current_price;
     }
-    gifts(wishlist, wishlist_index + 1, total_price, budget, answer);
+    gifts(wishlist, wishlist_index + 1, total_price, budget, answer, possible_gifts);
     total_price_buffer = total_price - wishlist[wishlist_index].price;
-    gifts(wishlist, wishlist_index + 1, total_price_buffer, budget, answer);
+    gifts(wishlist, wishlist_index + 1, total_price_buffer, budget, answer, possible_gifts);
     if(total_price > answer){
         answer = total_price;
+    }
+}
+
+void store_adjustment(vector<Gifts>& store, vector<Wishlist> given_gifts) {
+    for (int i = 0; i < given_gifts.size(); i++){
+        for (int j = 0; j < store.size(); j++){
+            if (given_gifts[i].item == store[j].item){
+                store[j].stock--;
+            }
+        }
     }
 }
 
@@ -119,15 +136,24 @@ int main() {
     vector<string> old_wishlist;
     vector<Gifts> store;
     vector<Wishlist> new_wishlist;
+    vector<Wishlist> to_be_given;
+    string choice;
     int budget = 0;
     int total_price = 0;
     int answer = 0;
+    bool cont = true;
+    while (cont){
+
+
+        switch ()
+
+    }
     enter_filename(wishlist_file);
     read_gift_store(store);
     read_wishlist(old_wishlist, wishlist_file, budget);
     wishlist_pair(old_wishlist, new_wishlist, store);
     cout << "Budget: " << budget << endl;
-    gifts(new_wishlist, 0, total_price, budget, answer);
+    gifts(new_wishlist, 0, total_price, budget, answer, to_be_given);
     cout << "Answer: " << answer << endl;
     return 0;
 }
