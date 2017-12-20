@@ -1,3 +1,8 @@
+/*
+Reinier Sanders, s4335422
+Laurens Kubat, s4626249
+*/
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -22,7 +27,7 @@ int read_file(vector<vector<char> > &puzzle) {
     ifstream infile;
     vector<char> buffer_vector;
     char c;
-    infile.open(enter_filename());
+    infile.open(enter_filename().c_str());
     if (!infile) {
         cout << "file not read correctly.";
         return 1;
@@ -55,14 +60,20 @@ void print_puzzle(vector<vector<char> > puzzle) {
 bool valid_move_north(vector<vector<char> > puzzle, int i, int j, vector<Repetition> repetitions) {
     // postconditions: This functions first check if the location the worker wants to move to is a wall. Then it checks
     // if the checks that the current situation has never happened before.
-    if (puzzle[i - 1][j] == '*' || puzzle[i - 1][j] == 'b' || puzzle[i - 1][j] == 'B') {
+    if (puzzle[i - 1][j] == '*') {
         return false;
+    }
+    if (puzzle[i - 1][j] == 'b' || puzzle[i - 1][j] == 'B') {
+        if (puzzle[i - 2][j] == 'b' || puzzle[i - 2][j] == 'B' || puzzle[i - 2][j] == '*') {
+            return false;
+        }
+        return true;
     }
     if (repetitions.empty()) {
         return true;
     }
     for (int u = 0; u < repetitions.size(); u++) {
-        if (repetitions[u].x_cord_w == j && repetitions[u].y_cord_w == i) {
+        if (repetitions[u].x_cord_w == j || repetitions[u].y_cord_w == i) {
             for (int v = 0; v < repetitions[u].puzzle.size(); v++) {
                 for (int w = 0; w < repetitions[u].puzzle[v].size(); w++) {
                     if (repetitions[u].puzzle[v][w] != puzzle[v][w]) {
@@ -78,14 +89,19 @@ bool valid_move_north(vector<vector<char> > puzzle, int i, int j, vector<Repetit
 bool valid_move_south(vector<vector<char> > puzzle, int i, int j, vector<Repetition> repetitions) {
     // postconditions: This functions first check if the location the worker wants to move to is a wall. Then it checks
     // if the checks that the current situation has never happened before.
-    if (puzzle[i + 1][j] == '*' || puzzle[i + 1][j] == 'b' || puzzle[i + 1][j] == 'B') {
+    if (puzzle[i + 1][j] == '*') {
         return false;
+    }
+    if (puzzle[i + 1][j] == 'b' || puzzle[i + 1][j] == 'B') {
+        if (puzzle[i + 2][j] == 'b' || puzzle[i + 2][j] == 'B' || puzzle[i + 2][j] == '*') {
+            return false;
+        }
+        return true;
     }
     if (repetitions.empty()) {
         return true;
     }
     for (int u = 0; u < repetitions.size(); u++) {
-        cout << repetitions[u].x_cord_w << " " << repetitions[u].y_cord_w;
         if (repetitions[u].x_cord_w == j || repetitions[u].y_cord_w == i) {
             for (int v = 0; v < repetitions[u].puzzle.size(); v++) {
                 for (int w = 0; w < repetitions[u].puzzle[v].size(); w++) {
@@ -102,14 +118,20 @@ bool valid_move_south(vector<vector<char> > puzzle, int i, int j, vector<Repetit
 bool valid_move_east(vector<vector<char> > puzzle, int i, int j, vector<Repetition> repetitions) {
     // postconditions: This functions first check if the location the worker wants to move to is a wall. Then it checks
     // if the checks that the current situation has never happened before.
-    if (puzzle[i][j + 1] == '*' || puzzle[i][j + 1] == 'b' || puzzle[i][j + 1] == 'B') {
+    if (puzzle[i][j + 1] == '*') {
         return false;
+    }
+    if (puzzle[i][j + 1] == 'b' || puzzle[i][j + 1] == 'B') {
+        if (puzzle[i][j + 2] == 'b' || puzzle[i][j + 2] == 'B' || puzzle[i][j + 2] == '*') {
+            return false;
+        }
+        return true;
     }
     if (repetitions.empty()) {
         return true;
     }
     for (int u = 0; u < repetitions.size(); u++) {
-        if (repetitions[u].x_cord_w == j && repetitions[u].y_cord_w == i) {
+        if (repetitions[u].x_cord_w == j || repetitions[u].y_cord_w == i) {
             for (int v = 0; v < repetitions[u].puzzle.size(); v++) {
                 for (int w = 0; w < repetitions[u].puzzle[v].size(); w++) {
                     if (repetitions[u].puzzle[v][w] != puzzle[v][w]) {
@@ -125,14 +147,20 @@ bool valid_move_east(vector<vector<char> > puzzle, int i, int j, vector<Repetiti
 bool valid_move_west(vector<vector<char> > puzzle, int i, int j, vector<Repetition> repetitions) {
     // postconditions: This functions first check if the location the worker wants to move to is a wall. Then it checks
     // if the checks that the current situation has never happened before.
-    if (puzzle[i][j - 1] == '*' || puzzle[i][j - 1] == 'b' || puzzle[i][j - 1] == 'B') {
+    if (puzzle[i][j - 1] == '*') {
         return false;
+    }
+    if (puzzle[i][j - 1] == 'b' || puzzle[i][j - 1] == 'B') {
+        if (puzzle[i][j - 2] == 'b' || puzzle[i][j - 2] == 'B' || puzzle[i][j - 2] == '*') {
+            return false;
+        }
+        return true;
     }
     if (repetitions.empty()) {
         return true;
     }
     for (int u = 0; u < repetitions.size(); u++) {
-        if (repetitions[u].x_cord_w == j && repetitions[u].y_cord_w == i) {
+        if (repetitions[u].x_cord_w == j || repetitions[u].y_cord_w == i) {
             for (int v = 0; v < repetitions[u].puzzle.size(); v++) {
                 for (int w = 0; w < repetitions[u].puzzle[v].size(); w++) {
                     if (repetitions[u].puzzle[v][w] != puzzle[v][w]) {
@@ -163,9 +191,22 @@ void go_north(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> 
         buffer.x_cord_w = i;
         buffer.puzzle = new_rep;
         repetitions.push_back(buffer);
+        if (puzzle[i - 1][j] == 'b' || puzzle[i - 1][j] == 'B') {
+            if (puzzle[i - 1][j] == 'B') {
+                puzzle[i - 1][j] = 'W';
+            } else {
+                puzzle[i - 1][j] = 'w';
+            }
+            if (puzzle[i - 2][j] == '.') {
+                puzzle[i - 2][j] = 'B';
+            } else {
+                puzzle[i - 2][j] = 'b';
+            }
+        }
         if (puzzle[i][j] == 'W') {
             puzzle[i][j] = '.';
-        } else {
+        }
+        if (puzzle[i][j] == 'w') {
             puzzle[i][j] = ' ';
         }
         if (puzzle[i - 1][j] == '.') {
@@ -176,7 +217,6 @@ void go_north(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> 
         i--;
     }
 }
-
 
 void go_south(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> &repetitions) {
     vector<vector<char> > new_rep;
@@ -196,6 +236,18 @@ void go_south(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> 
         buffer.x_cord_w = i;
         buffer.puzzle = new_rep;
         repetitions.push_back(buffer);
+        if (puzzle[i + 1][j] == 'b' || puzzle[i + 1][j] == 'B') {
+            if (puzzle[i + 1][j] == 'B') {
+                puzzle[i + 1][j] = 'W';
+            } else {
+                puzzle[i + 1][j] = 'w';
+            }
+            if (puzzle[i + 2][j] == '.') {
+                puzzle[i + 2][j] = 'B';
+            } else {
+                puzzle[i + 2][j] = 'b';
+            }
+        }
         if (puzzle[i][j] == 'W') {
             puzzle[i][j] = '.';
         } else {
@@ -209,7 +261,6 @@ void go_south(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> 
         i++;
     }
 }
-
 
 void go_east(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> &repetitions) {
     vector<vector<char> > new_rep;
@@ -229,6 +280,18 @@ void go_east(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> &
         buffer.x_cord_w = i;
         buffer.puzzle = new_rep;
         repetitions.push_back(buffer);
+        if (puzzle[i][j + 1] == 'b' || puzzle[i][j + 1] == 'B') {
+            if (puzzle[i][j + 1] == 'B') {
+                puzzle[i][j + 1] = 'W';
+            } else {
+                puzzle[i][j + 1] = 'w';
+            }
+            if (puzzle[i][j + 2] == '.') {
+                puzzle[i][j + 2] = 'B';
+            } else {
+                puzzle[i][j + 2] = 'b';
+            }
+        }
         if (puzzle[i][j] == 'W') {
             puzzle[i][j] = '.';
         } else {
@@ -242,7 +305,6 @@ void go_east(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> &
         j++;
     }
 }
-
 
 void go_west(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> &repetitions) {
     vector<vector<char> > new_rep;
@@ -262,6 +324,18 @@ void go_west(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> &
         buffer.x_cord_w = i;
         buffer.puzzle = new_rep;
         repetitions.push_back(buffer);
+        if (puzzle[i][j - 1] == 'b' || puzzle[i][j - 1] == 'B') {
+            if (puzzle[i][j - 1] == 'B') {
+                puzzle[i][j - 1] = 'W';
+            } else {
+                puzzle[i][j - 1] = 'w';
+            }
+            if (puzzle[i][j - 2] == '.') {
+                puzzle[i][j - 2] = 'B';
+            } else {
+                puzzle[i][j - 2] = 'b';
+            }
+        }
         if (puzzle[i][j] == 'W') {
             puzzle[i][j] = '.';
         } else {
@@ -273,9 +347,7 @@ void go_west(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> &
             puzzle[i][j - 1] = 'w';
         }
         j--;
-
     }
-
 }
 
 void breadth_first() {
@@ -294,7 +366,11 @@ int main() {
     print_puzzle(puzzle);
     go_south(puzzle, y_cord, x_cord, reps);
     print_puzzle(puzzle);
+    go_south(puzzle, y_cord, x_cord, reps);
+    print_puzzle(puzzle);
     go_east(puzzle, y_cord, x_cord, reps);
+    print_puzzle(puzzle);
+    go_north(puzzle, y_cord, x_cord, reps);
     print_puzzle(puzzle);
     return 0;
 }
