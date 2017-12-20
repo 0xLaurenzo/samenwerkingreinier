@@ -350,11 +350,41 @@ void go_west(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> &
     }
 }
 
+bool challenge_finished(vector<vector<char> > puzzle){
+    for (int i = 0; i < puzzle.size(); i++){
+        for (int j = 0; j < puzzle[i].size(); j++){
+            if (puzzle[i][j] == 'b')
+                return false;
+        }
+    }
+    return true;
+}
+
+void find_start(vector<vector<char> > puzzle, int& start_y, int& start_x){
+    for (int i = 0; i < puzzle.size(); i++){
+        for (int j = 0; j < puzzle[i].size(); j++){
+            if (puzzle[i][j] == 'w' || puzzle[i][j] == 'W'){
+                start_x = j;
+                start_y = i;
+            }
+        }
+    }
+}
+
 void breadth_first() {
 
 }
 
-void depth_first() {
+void depth_first(vector<vector<char> > puzzle, int move_count, int final_count) {
+    if(challenge_finished(puzzle)){
+        if (final_count == 0){
+            move_count = final_count;
+        }
+        if(move_count < final_count) {
+            move_count = final_count;
+        }
+        return;
+    }
 
 }
 
