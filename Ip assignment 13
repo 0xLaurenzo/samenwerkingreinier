@@ -48,7 +48,7 @@ int read_file(vector<vector<char> > &puzzle) {
     return 0;
 }
 
-void print_puzzle(vector<vector<char> > puzzle) {
+void print_puzzle(vector<vector<char> >& puzzle) {
     for (int i = 0; i < puzzle.size(); i++) {
         for (int j = 0; j < puzzle[i].size(); j++) {
             cout << puzzle[i][j];
@@ -57,22 +57,26 @@ void print_puzzle(vector<vector<char> > puzzle) {
     }
 }
 
-bool valid_move_north(vector<vector<char> > puzzle, int i, int j, vector<Repetition> repetitions) {
+bool valid_move_north(vector<vector<char> > &puzzle, int i, int j, vector<Repetition>& repetitions) {
     // postconditions: This functions first check if the location the worker wants to move to is a wall. Then it checks
     // if the checks that the current situation has never happened before.
+    cout << "test1";
     if (puzzle[i - 1][j] == '*') {
         return false;
     }
+    cout << "test3";
     if (puzzle[i - 1][j] == 'b' || puzzle[i - 1][j] == 'B') {
         if (puzzle[i - 2][j] == 'b' || puzzle[i - 2][j] == 'B' || puzzle[i - 2][j] == '*') {
             return false;
         }
         return true;
     }
+    cout << "test4";
     if (repetitions.empty()) {
         return true;
     }
     for (int u = 0; u < repetitions.size(); u++) {
+        cout << "test5";
         if (repetitions[u].x_cord_w == j || repetitions[u].y_cord_w == i) {
             for (int v = 0; v < repetitions[u].puzzle.size(); v++) {
                 for (int w = 0; w < repetitions[u].puzzle[v].size(); w++) {
@@ -86,7 +90,7 @@ bool valid_move_north(vector<vector<char> > puzzle, int i, int j, vector<Repetit
     return false;
 }
 
-bool valid_move_south(vector<vector<char> > puzzle, int i, int j, vector<Repetition> repetitions) {
+bool valid_move_south(vector<vector<char> >& puzzle, int i, int j, vector<Repetition>& repetitions) {
     // postconditions: This functions first check if the location the worker wants to move to is a wall. Then it checks
     // if the checks that the current situation has never happened before.
     if (puzzle[i + 1][j] == '*') {
@@ -115,7 +119,7 @@ bool valid_move_south(vector<vector<char> > puzzle, int i, int j, vector<Repetit
     return false;
 }
 
-bool valid_move_east(vector<vector<char> > puzzle, int i, int j, vector<Repetition> repetitions) {
+bool valid_move_east(vector<vector<char> >& puzzle, int i, int j, vector<Repetition>& repetitions) {
     // postconditions: This functions first check if the location the worker wants to move to is a wall. Then it checks
     // if the checks that the current situation has never happened before.
     if (puzzle[i][j + 1] == '*') {
@@ -144,7 +148,7 @@ bool valid_move_east(vector<vector<char> > puzzle, int i, int j, vector<Repetiti
     return false;
 }
 
-bool valid_move_west(vector<vector<char> > puzzle, int i, int j, vector<Repetition> repetitions) {
+bool valid_move_west(vector<vector<char> >& puzzle, int i, int j, vector<Repetition>& repetitions) {
     // postconditions: This functions first check if the location the worker wants to move to is a wall. Then it checks
     // if the checks that the current situation has never happened before.
     if (puzzle[i][j - 1] == '*') {
@@ -173,11 +177,13 @@ bool valid_move_west(vector<vector<char> > puzzle, int i, int j, vector<Repetiti
     return false;
 }
 
-void go_north(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> &repetitions) {
+void go_north(vector<vector<char> > &puzzle, int i, int j, vector<Repetition> &repetitions) {
     vector<vector<char> > new_rep;
     vector<char> buffer_vector;
     Repetition buffer;
+    cout << "in go_north.\n";
     if (valid_move_north(puzzle, i, j, repetitions)) {
+        cout << "out of valid move.\n";
         for (int u = 0; u < puzzle.size(); u++) {
             for (int v = 0; v < puzzle[u].size(); v++) {
                 buffer_vector.push_back(puzzle[u][v]);
@@ -214,11 +220,11 @@ void go_north(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> 
         } else {
             puzzle[i - 1][j] = 'w';
         }
-        i--;
     }
+    cout << "no valid move";
 }
 
-void go_south(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> &repetitions) {
+void go_south(vector<vector<char> > &puzzle, int i, int j, vector<Repetition> &repetitions) {
     vector<vector<char> > new_rep;
     vector<char> buffer_vector;
     Repetition buffer;
@@ -258,11 +264,10 @@ void go_south(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> 
         } else {
             puzzle[i + 1][j] = 'w';
         }
-        i++;
     }
 }
 
-void go_east(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> &repetitions) {
+void go_east(vector<vector<char> > &puzzle, int i, int j, vector<Repetition> &repetitions) {
     vector<vector<char> > new_rep;
     vector<char> buffer_vector;
     Repetition buffer;
@@ -302,11 +307,10 @@ void go_east(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> &
         } else {
             puzzle[i][j + 1] = 'w';
         }
-        j++;
     }
 }
 
-void go_west(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> &repetitions) {
+void go_west(vector<vector<char> > &puzzle, int i, int j, vector<Repetition> &repetitions) {
     vector<vector<char> > new_rep;
     vector<char> buffer_vector;
     Repetition buffer;
@@ -346,13 +350,13 @@ void go_west(vector<vector<char> > &puzzle, int &i, int &j, vector<Repetition> &
         } else {
             puzzle[i][j - 1] = 'w';
         }
-        j--;
     }
 }
 
-bool challenge_finished(vector<vector<char> > puzzle){
-    for (int i = 0; i < puzzle.size(); i++){
-        for (int j = 0; j < puzzle[i].size(); j++){
+bool challenge_finished(vector<vector<char> >& puzzle) {
+    cout << "in challenge";
+    for (int i = 0; i < puzzle.size(); i++) {
+        for (int j = 0; j < puzzle[j].size(); j++) {
             if (puzzle[i][j] == 'b')
                 return false;
         }
@@ -360,10 +364,10 @@ bool challenge_finished(vector<vector<char> > puzzle){
     return true;
 }
 
-void find_start(vector<vector<char> > puzzle, int& start_y, int& start_x){
-    for (int i = 0; i < puzzle.size(); i++){
-        for (int j = 0; j < puzzle[i].size(); j++){
-            if (puzzle[i][j] == 'w' || puzzle[i][j] == 'W'){
+void find_start(vector<vector<char> >& puzzle, int &start_y, int &start_x) {
+    for (int i = 0; i < puzzle.size(); i++) {
+        for (int j = 0; j < puzzle[i].size(); j++) {
+            if (puzzle[i][j] == 'w' || puzzle[i][j] == 'W') {
                 start_x = j;
                 start_y = i;
             }
@@ -375,32 +379,68 @@ void breadth_first() {
 
 }
 
-void depth_first(vector<vector<char> > puzzle, int move_count, int final_count) {
-    if(challenge_finished(puzzle)){
-        if (final_count == 0){
+void depth_first(vector<vector<char> > &puzzle, int move_count, int final_count, int x_cord, int y_cord, char move_dir,
+                 vector<Repetition> &reps) {
+    if (challenge_finished(puzzle)) {
+        if (final_count == 0) {
             move_count = final_count;
         }
-        if(move_count < final_count) {
+        if (move_count < final_count) {
             move_count = final_count;
         }
         return;
     }
-
+    vector<vector<char> > buffer_puzzle;
+    vector<char> copy_buffer;
+    for (int u = 0; u < puzzle.size(); u++) {
+        for (int v = 0; v < puzzle[u].size(); v++) {
+            copy_buffer.push_back(puzzle[u][v]);
+        }
+        buffer_puzzle.push_back(copy_buffer);
+        while (!copy_buffer.empty()) {
+            copy_buffer.pop_back();
+        }
+    }
+    switch (move_dir) {
+        case 'n': {
+            go_north(buffer_puzzle, y_cord, x_cord, reps);
+            print_puzzle(puzzle);
+            break;
+        }
+        case 's': {
+            go_south(buffer_puzzle, y_cord, x_cord, reps);
+            print_puzzle(puzzle);
+            break;
+        }
+        case 'e': {
+            go_east(buffer_puzzle, y_cord, x_cord, reps);
+            print_puzzle(puzzle);
+            break;
+        }
+        case 'w': {
+            go_west(buffer_puzzle, y_cord, x_cord, reps);
+            print_puzzle(puzzle);
+            break;
+        }
+        default:
+            cout << "wew lad";
+    }
+    depth_first(buffer_puzzle, move_count + 1, final_count, x_cord, y_cord - 1, 'n', reps);
+    cout << "after_north";
+    depth_first(buffer_puzzle, move_count + 1, final_count, x_cord, y_cord + 1, 's', reps);
+    depth_first(buffer_puzzle, move_count + 1, final_count, x_cord + 1, y_cord, 'e', reps);
+    depth_first(buffer_puzzle, move_count + 1, final_count, x_cord - 1, y_cord, 'w', reps);
 }
+
 
 int main() {
     vector<vector<char> > puzzle;
     vector<Repetition> reps;
     int x_cord = 1, y_cord = 1;
+    int final_count = 0;
+    int move_count = 0;
     read_file(puzzle);
-    print_puzzle(puzzle);
-    go_south(puzzle, y_cord, x_cord, reps);
-    print_puzzle(puzzle);
-    go_south(puzzle, y_cord, x_cord, reps);
-    print_puzzle(puzzle);
-    go_east(puzzle, y_cord, x_cord, reps);
-    print_puzzle(puzzle);
-    go_north(puzzle, y_cord, x_cord, reps);
-    print_puzzle(puzzle);
+    find_start(puzzle, y_cord, x_cord);
+    depth_first(puzzle, move_count, final_count, x_cord, y_cord, 's', reps);
     return 0;
 }
