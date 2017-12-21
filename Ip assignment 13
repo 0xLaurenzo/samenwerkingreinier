@@ -60,23 +60,19 @@ void print_puzzle(vector<vector<char> >& puzzle) {
 bool valid_move_north(vector<vector<char> > &puzzle, int i, int j, vector<Repetition>& repetitions) {
     // postconditions: This functions first check if the location the worker wants to move to is a wall. Then it checks
     // if the checks that the current situation has never happened before.
-    cout << "test1";
     if (puzzle[i - 1][j] == '*') {
         return false;
     }
-    cout << "test3";
     if (puzzle[i - 1][j] == 'b' || puzzle[i - 1][j] == 'B') {
         if (puzzle[i - 2][j] == 'b' || puzzle[i - 2][j] == 'B' || puzzle[i - 2][j] == '*') {
             return false;
         }
         return true;
     }
-    cout << "test4";
     if (repetitions.empty()) {
         return true;
     }
     for (int u = 0; u < repetitions.size(); u++) {
-        cout << "test5";
         if (repetitions[u].x_cord_w == j || repetitions[u].y_cord_w == i) {
             for (int v = 0; v < repetitions[u].puzzle.size(); v++) {
                 for (int w = 0; w < repetitions[u].puzzle[v].size(); w++) {
@@ -181,9 +177,7 @@ void go_north(vector<vector<char> > &puzzle, int i, int j, vector<Repetition> &r
     vector<vector<char> > new_rep;
     vector<char> buffer_vector;
     Repetition buffer;
-    cout << "in go_north.\n";
     if (valid_move_north(puzzle, i, j, repetitions)) {
-        cout << "out of valid move.\n";
         for (int u = 0; u < puzzle.size(); u++) {
             for (int v = 0; v < puzzle[u].size(); v++) {
                 buffer_vector.push_back(puzzle[u][v]);
@@ -193,35 +187,34 @@ void go_north(vector<vector<char> > &puzzle, int i, int j, vector<Repetition> &r
                 buffer_vector.pop_back();
             }
         }
-        buffer.y_cord_w = j;
-        buffer.x_cord_w = i;
+        buffer.y_cord_w = i;
+        buffer.x_cord_w = j;
         buffer.puzzle = new_rep;
         repetitions.push_back(buffer);
-        if (puzzle[i - 1][j] == 'b' || puzzle[i - 1][j] == 'B') {
-            if (puzzle[i - 1][j] == 'B') {
-                puzzle[i - 1][j] = 'W';
+        if (puzzle[i][j] == 'b' || puzzle[i][j] == 'B') {
+            if (puzzle[i][j] == 'B') {
+                puzzle[i][j] = 'W';
             } else {
-                puzzle[i - 1][j] = 'w';
+                puzzle[i][j] = 'w';
             }
-            if (puzzle[i - 2][j] == '.') {
-                puzzle[i - 2][j] = 'B';
+            if (puzzle[i - 1][j] == '.') {
+                puzzle[i - 1][j] = 'B';
             } else {
-                puzzle[i - 2][j] = 'b';
+                puzzle[i - 1][j] = 'b';
             }
         }
-        if (puzzle[i][j] == 'W') {
-            puzzle[i][j] = '.';
+        if (puzzle[i + 1][j] == 'W') {
+            puzzle[i + 1][j] = '.';
         }
-        if (puzzle[i][j] == 'w') {
-            puzzle[i][j] = ' ';
+        if (puzzle[i + 1][j] == 'w') {
+            puzzle[i + 1][j] = ' ';
         }
-        if (puzzle[i - 1][j] == '.') {
-            puzzle[i - 1][j] = 'W';
+        if (puzzle[i][j] == '.') {
+            puzzle[i][j] = 'W';
         } else {
-            puzzle[i - 1][j] = 'w';
+            puzzle[i][j] = 'w';
         }
     }
-    cout << "no valid move";
 }
 
 void go_south(vector<vector<char> > &puzzle, int i, int j, vector<Repetition> &repetitions) {
@@ -238,31 +231,31 @@ void go_south(vector<vector<char> > &puzzle, int i, int j, vector<Repetition> &r
                 buffer_vector.pop_back();
             }
         }
-        buffer.y_cord_w = j;
-        buffer.x_cord_w = i;
+        buffer.y_cord_w = i;
+        buffer.x_cord_w = j;
         buffer.puzzle = new_rep;
         repetitions.push_back(buffer);
-        if (puzzle[i + 1][j] == 'b' || puzzle[i + 1][j] == 'B') {
-            if (puzzle[i + 1][j] == 'B') {
-                puzzle[i + 1][j] = 'W';
+        if (puzzle[i][j] == 'b' || puzzle[i][j] == 'B') {
+            if (puzzle[i][j] == 'B') {
+                puzzle[i][j] = 'W';
             } else {
-                puzzle[i + 1][j] = 'w';
+                puzzle[i][j] = 'w';
             }
-            if (puzzle[i + 2][j] == '.') {
-                puzzle[i + 2][j] = 'B';
+            if (puzzle[i + 1][j] == '.') {
+                puzzle[i + 1][j] = 'B';
             } else {
-                puzzle[i + 2][j] = 'b';
+                puzzle[i + 1][j] = 'b';
             }
         }
-        if (puzzle[i][j] == 'W') {
-            puzzle[i][j] = '.';
+        if (puzzle[i - 1][j] == 'W') {
+            puzzle[i - 1][j] = '.';
         } else {
-            puzzle[i][j] = ' ';
+            puzzle[i - 1][j] = ' ';
         }
-        if (puzzle[i + 1][j] == '.') {
-            puzzle[i + 1][j] = 'W';
+        if (puzzle[i][j] == '.') {
+            puzzle[i][j] = 'W';
         } else {
-            puzzle[i + 1][j] = 'w';
+            puzzle[i][j] = 'w';
         }
     }
 }
@@ -281,31 +274,33 @@ void go_east(vector<vector<char> > &puzzle, int i, int j, vector<Repetition> &re
                 buffer_vector.pop_back();
             }
         }
-        buffer.y_cord_w = j;
-        buffer.x_cord_w = i;
+
+        buffer.y_cord_w = i;
+        buffer.x_cord_w = j;
         buffer.puzzle = new_rep;
+
         repetitions.push_back(buffer);
-        if (puzzle[i][j + 1] == 'b' || puzzle[i][j + 1] == 'B') {
-            if (puzzle[i][j + 1] == 'B') {
-                puzzle[i][j + 1] = 'W';
+        if (puzzle[i][j] == 'b' || puzzle[i][j + 1] == 'B') {
+            if (puzzle[i][j] == 'B') {
+                puzzle[i][j] = 'W';
             } else {
-                puzzle[i][j + 1] = 'w';
+                puzzle[i][j] = 'w';
             }
-            if (puzzle[i][j + 2] == '.') {
-                puzzle[i][j + 2] = 'B';
+            if (puzzle[i][j + 1] == '.') {
+                puzzle[i][j + 1] = 'B';
             } else {
-                puzzle[i][j + 2] = 'b';
+                puzzle[i][j + 1] = 'b';
             }
         }
-        if (puzzle[i][j] == 'W') {
-            puzzle[i][j] = '.';
+        if (puzzle[i][j - 1] == 'W') {
+            puzzle[i][j - 1] = '.';
         } else {
-            puzzle[i][j] = ' ';
+            puzzle[i][j - 1] = ' ';
         }
-        if (puzzle[i][j + 1] == '.') {
-            puzzle[i][j + 1] = 'W';
+        if (puzzle[i][j] == '.') {
+            puzzle[i][j] = 'W';
         } else {
-            puzzle[i][j + 1] = 'w';
+            puzzle[i][j] = 'w';
         }
     }
 }
@@ -324,31 +319,31 @@ void go_west(vector<vector<char> > &puzzle, int i, int j, vector<Repetition> &re
                 buffer_vector.pop_back();
             }
         }
-        buffer.y_cord_w = j;
-        buffer.x_cord_w = i;
+        buffer.y_cord_w = i;
+        buffer.x_cord_w = j;
         buffer.puzzle = new_rep;
         repetitions.push_back(buffer);
-        if (puzzle[i][j - 1] == 'b' || puzzle[i][j - 1] == 'B') {
-            if (puzzle[i][j - 1] == 'B') {
-                puzzle[i][j - 1] = 'W';
+        if (puzzle[i][j] == 'b' || puzzle[i][j] == 'B') {
+            if (puzzle[i][j] == 'B') {
+                puzzle[i][j] = 'W';
             } else {
-                puzzle[i][j - 1] = 'w';
+                puzzle[i][j] = 'w';
             }
-            if (puzzle[i][j - 2] == '.') {
-                puzzle[i][j - 2] = 'B';
+            if (puzzle[i][j - 1] == '.') {
+                puzzle[i][j - 1] = 'B';
             } else {
-                puzzle[i][j - 2] = 'b';
+                puzzle[i][j - 1] = 'b';
             }
         }
-        if (puzzle[i][j] == 'W') {
-            puzzle[i][j] = '.';
+        if (puzzle[i][j + 1] == 'W') {
+            puzzle[i][j + 1] = '.';
         } else {
-            puzzle[i][j] = ' ';
+            puzzle[i][j + 1] = ' ';
         }
-        if (puzzle[i][j - 1] == '.') {
-            puzzle[i][j - 1] = 'W';
+        if (puzzle[i][j] == '.') {
+            puzzle[i][j] = 'W';
         } else {
-            puzzle[i][j - 1] = 'w';
+            puzzle[i][j] = 'w';
         }
     }
 }
@@ -382,7 +377,9 @@ void breadth_first() {
 
 }
 
-void depth_first(vector<vector<char> > &puzzle, int move_count, int final_count, int x_cord, int y_cord, vector<Repetition> &reps) {
+void depth_first(vector<vector<char> > &puzzle, int move_count, int& final_count, int x_cord, int y_cord, vector<Repetition> &reps) {
+    int t;
+    cin >> t;
     if (challenge_finished(puzzle)) {
         if (final_count == 0) {
             move_count = final_count;
@@ -405,30 +402,73 @@ void depth_first(vector<vector<char> > &puzzle, int move_count, int final_count,
     }
     if (valid_move_north(buffer_puzzle, y_cord, x_cord, reps)) {
         cout << "North is valid\n";
-        go_north(buffer_puzzle, y_cord - 1, x_cord, reps);
-        print_puzzle(buffer_puzzle);
-        depth_first(buffer_puzzle, move_count + 1, final_count, x_cord, y_cord - 1, reps);
+        vector<vector<char> > buffer_puzzle_north;
+        vector<char> copy_buffer;
+        for (int u = 0; u < puzzle.size(); u++) {
+            for (int v = 0; v < puzzle[u].size(); v++) {
+                copy_buffer.push_back(puzzle[u][v]);
+            }
+            buffer_puzzle_north.push_back(copy_buffer);
+            while (!copy_buffer.empty()) {
+                copy_buffer.pop_back();
+            }
+        }
+        go_north(buffer_puzzle_north, y_cord - 1, x_cord, reps);
+        print_puzzle(buffer_puzzle_north);
+        depth_first(buffer_puzzle_north, move_count + 1, final_count, x_cord, y_cord - 1, reps);
     }
     if (valid_move_east(buffer_puzzle, y_cord, x_cord, reps)) {
         cout << "East is valid\n";
-        go_east(buffer_puzzle, y_cord, x_cord + 1, reps);
-        print_puzzle(buffer_puzzle);
-        depth_first(buffer_puzzle, move_count + 1, final_count, x_cord + 1, y_cord, reps);
+        vector<vector<char> > buffer_puzzle_east;
+        vector<char> copy_buffer;
+        for (int u = 0; u < puzzle.size(); u++) {
+            for (int v = 0; v < puzzle[u].size(); v++) {
+                copy_buffer.push_back(puzzle[u][v]);
+            }
+            buffer_puzzle_east.push_back(copy_buffer);
+            while (!copy_buffer.empty()) {
+                copy_buffer.pop_back();
+            }
+        }
+        go_east(buffer_puzzle_east, y_cord, x_cord + 1, reps);
+        print_puzzle(buffer_puzzle_east);
+        depth_first(buffer_puzzle_east, move_count + 1, final_count, x_cord + 1, y_cord, reps);
     }
     if (valid_move_south(buffer_puzzle, y_cord, x_cord, reps)) {
         cout << "South is valid\n";
-        go_south(buffer_puzzle, y_cord + 1, x_cord, reps);
-        print_puzzle(buffer_puzzle);
-        depth_first(buffer_puzzle, move_count + 1, final_count, x_cord, y_cord + 1, reps);
+        vector<vector<char> > buffer_puzzle_south;
+        vector<char> copy_buffer;
+        for (int u = 0; u < puzzle.size(); u++) {
+            for (int v = 0; v < puzzle[u].size(); v++) {
+                copy_buffer.push_back(puzzle[u][v]);
+            }
+            buffer_puzzle_south.push_back(copy_buffer);
+            while (!copy_buffer.empty()) {
+                copy_buffer.pop_back();
+            }
+        }
+        go_south(buffer_puzzle_south, y_cord + 1, x_cord, reps);
+        print_puzzle(buffer_puzzle_south);
+        depth_first(buffer_puzzle_south, move_count + 1, final_count, x_cord, y_cord + 1, reps);
     }
     if (valid_move_west(buffer_puzzle, y_cord, x_cord, reps)) {
         cout << "West is valid\n";
-        go_west(buffer_puzzle, y_cord, x_cord - 1, reps);
-        print_puzzle(buffer_puzzle);
-        depth_first(buffer_puzzle, move_count + 1, final_count, x_cord - 1, y_cord, reps);
+        vector<vector<char> > buffer_puzzle_west;
+        vector<char> copy_buffer;
+        for (int u = 0; u < puzzle.size(); u++) {
+            for (int v = 0; v < puzzle[u].size(); v++) {
+                copy_buffer.push_back(puzzle[u][v]);
+            }
+            buffer_puzzle_west.push_back(copy_buffer);
+            while (!copy_buffer.empty()) {
+                copy_buffer.pop_back();
+            }
+        }
+        go_west(buffer_puzzle_west, y_cord, x_cord - 1, reps);
+        print_puzzle(buffer_puzzle_west);
+        depth_first(buffer_puzzle_west, move_count + 1, final_count, x_cord - 1, y_cord, reps);
     }
 }
-
 
 int main() {
     vector<vector<char> > puzzle;
