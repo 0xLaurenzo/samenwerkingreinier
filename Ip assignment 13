@@ -356,11 +356,14 @@ void go_west(vector<vector<char> > &puzzle, int i, int j, vector<Repetition> &re
 bool challenge_finished(vector<vector<char> >& puzzle) {
     cout << "in challenge";
     for (int i = 0; i < puzzle.size(); i++) {
-        for (int j = 0; j < puzzle[j].size(); j++) {
-            if (puzzle[i][j] == 'b')
+        for (int j = 0; j < puzzle[i].size(); j++) {
+            if (puzzle[i][j] == 'b'){
+                cout << "false" << endl;
                 return false;
+            }
         }
     }
+    cout << "true" << endl;
     return true;
 }
 
@@ -379,8 +382,7 @@ void breadth_first() {
 
 }
 
-void depth_first(vector<vector<char> > &puzzle, int move_count, int final_count, int x_cord, int y_cord, char move_dir,
-                 vector<Repetition> &reps) {
+void depth_first(vector<vector<char> > &puzzle, int move_count, int final_count, int x_cord, int y_cord, vector<Repetition> &reps) {
     if (challenge_finished(puzzle)) {
         if (final_count == 0) {
             move_count = final_count;
@@ -401,35 +403,30 @@ void depth_first(vector<vector<char> > &puzzle, int move_count, int final_count,
             copy_buffer.pop_back();
         }
     }
-    switch (move_dir) {
-        case 'n': {
-            go_north(buffer_puzzle, y_cord, x_cord, reps);
-            print_puzzle(puzzle);
-            break;
-        }
-        case 's': {
-            go_south(buffer_puzzle, y_cord, x_cord, reps);
-            print_puzzle(puzzle);
-            break;
-        }
-        case 'e': {
-            go_east(buffer_puzzle, y_cord, x_cord, reps);
-            print_puzzle(puzzle);
-            break;
-        }
-        case 'w': {
-            go_west(buffer_puzzle, y_cord, x_cord, reps);
-            print_puzzle(puzzle);
-            break;
-        }
-        default:
-            cout << "wew lad";
+    if (valid_move_north(buffer_puzzle, y_cord, x_cord, reps)) {
+        cout << "North is valid\n";
+        go_north(buffer_puzzle, y_cord - 1, x_cord, reps);
+        print_puzzle(buffer_puzzle);
+        depth_first(buffer_puzzle, move_count + 1, final_count, x_cord, y_cord - 1, reps);
     }
-    depth_first(buffer_puzzle, move_count + 1, final_count, x_cord, y_cord - 1, 'n', reps);
-    cout << "after_north";
-    depth_first(buffer_puzzle, move_count + 1, final_count, x_cord, y_cord + 1, 's', reps);
-    depth_first(buffer_puzzle, move_count + 1, final_count, x_cord + 1, y_cord, 'e', reps);
-    depth_first(buffer_puzzle, move_count + 1, final_count, x_cord - 1, y_cord, 'w', reps);
+    if (valid_move_east(buffer_puzzle, y_cord, x_cord, reps)) {
+        cout << "East is valid\n";
+        go_east(buffer_puzzle, y_cord, x_cord + 1, reps);
+        print_puzzle(buffer_puzzle);
+        depth_first(buffer_puzzle, move_count + 1, final_count, x_cord + 1, y_cord, reps);
+    }
+    if (valid_move_south(buffer_puzzle, y_cord, x_cord, reps)) {
+        cout << "South is valid\n";
+        go_south(buffer_puzzle, y_cord + 1, x_cord, reps);
+        print_puzzle(buffer_puzzle);
+        depth_first(buffer_puzzle, move_count + 1, final_count, x_cord, y_cord + 1, reps);
+    }
+    if (valid_move_west(buffer_puzzle, y_cord, x_cord, reps)) {
+        cout << "West is valid\n";
+        go_west(buffer_puzzle, y_cord, x_cord - 1, reps);
+        print_puzzle(buffer_puzzle);
+        depth_first(buffer_puzzle, move_count + 1, final_count, x_cord - 1, y_cord, reps);
+    }
 }
 
 
@@ -441,6 +438,7 @@ int main() {
     int move_count = 0;
     read_file(puzzle);
     find_start(puzzle, y_cord, x_cord);
-    depth_first(puzzle, move_count, final_count, x_cord, y_cord, 's', reps);
+    print_puzzle(puzzle);
+    depth_first(puzzle, move_count, final_count, x_cord, y_cord, reps);
     return 0;
 }
