@@ -1,0 +1,303 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+#include <cstring>
+#include <vector>
+#include <cassert>
+
+using namespace std;
+
+/*
+Reinier Sanders,    s4335422, Informatica
+Laurens Kubat,      s4626249, Informatica
+
+Opmerking: onze sorteeralgoritmen sorteren op ASCII waarden in de Track strings, en niet alfabetisch.
+*/
+
+struct Length
+{
+    int minutes;                            // #minuten  (0..)
+    int seconds;                            // #seconden (0..59)
+};
+struct Track
+{
+    string artist;                          // naam van uitvoerende artiest
+    string cd;                              // titel van cd
+    int    year;                            // jaar van uitgave
+    int    track;                           // nummer van track
+    string title;                           // titel van track
+    string tags;                            // tags van track
+    Length time;                            // lengte van track
+    string country;                         // land van artiest
+};
+
+vector<Track> liedjes;
+
+bool operator<(const Length& a, const Length& b)
+{
+    if (a.minutes == b.minutes)
+    {
+        return a.seconds < b.seconds;
+    }
+    return a.minutes < b.minutes;
+}
+
+bool operator==(const Length& a, const Length& b)
+{
+    return (a.minutes == b.minutes && a.seconds == b.seconds);
+}
+
+bool operator<(const Track& a, const Track& b)
+{
+    /*
+    //Sort on track time
+    if (a.time < b.time)
+        return true;
+    if (a.time == b.time && a.artist < b.artist)
+        return true;
+    if (a.time == b.time && a.artist == b.artist && a.title < b.title)
+        return true;
+    if (a.time == b.time && a.artist == b.artist && a.title == b.title && a.cd < b.cd)
+        return true;
+    */
+    // Sort on track name
+    if (a.artist < b.artist)
+        return true;
+    if (a.artist == b.artist && a.cd < b.cd)
+        return true;
+    if (a.artist == b.artist && a.cd == b.cd && a.track < b.track)
+        return true;
+
+    return false;
+}
+
+bool operator==(const Track& a, const Track& b)
+{
+    /*
+    // Track time
+    return (a.time == b.time && a.artist == b.artist && a.title == b.title && a.cd == b.cd);
+    */
+    // Track name
+    return (a.artist == b.artist && a.cd == b.cd && a.track == b.track);
+
+}
+
+bool operator>(const Track& a, const Track& b)
+{
+    return b < a ;
+}
+
+bool operator<=(const Track& a, const Track& b)
+{
+    return !(b < a) ;
+}
+
+bool operator>=(const Track& a, const Track& b)
+{
+    return b <= a ;
+}
+
+istream& operator>> (istream& in, Length& lengte)
+{
+    // Preconditie:
+    assert (true) ;
+    /*  Postconditie:
+        de waarde van lengte is ingelezen uit in: eerst minuten, daarna ':', daarna seconden.
+    */
+    char colon ;
+    in >> lengte.minutes >> colon >> lengte.seconds ;
+    return in ;
+}
+
+ostream& operator<< (ostream& out, const Length lengte)
+{
+    out << lengte.minutes << ':' ;
+    if (lengte.seconds < 10)
+        out << '0' ;
+    out << lengte.seconds ;
+    return out ;
+}
+
+istream& operator>> (istream& infile, Track& track)
+{
+    string dummy;
+    getline(infile,track.artist);       // artist
+    getline(infile,track.cd);           // cd
+    infile >> track.year ;              // year
+    getline(infile, dummy) ;            // verwijder t/m newline
+    infile >> track.track ;             // track nr
+    getline(infile, dummy) ;            // verwijder t/m newline
+    getline(infile,track.title);        // track title
+    getline(infile,track.tags);         // track tags
+    infile >> track.time ;              // track time
+    getline(infile, dummy) ;            // verwijder t/m newline
+    getline(infile,track.country);      // country
+    getline(infile, dummy) ;            // verwijder t/m newline
+    return infile ;
+}
+
+ostream& operator<< (ostream& out, const Track track)
+{
+    out << track.artist << " " << track.cd << " [" << track.track << "] (" << track.time << ")" ;
+    return out ;
+}
+
+int lees_liedjes(ifstream& infile, vector<Track>& liedjes)
+{
+    // PRE
+    assert(infile.is_open());
+    // POST
+    int trackcount = 0;
+    Track buffer;
+    while(!infile.eof())
+    {
+        trackcount = liedjes.size();
+        infile >> buffer;
+        liedjes.push_back(buffer);
+    }
+    return trackcount;
+}
+
+int lees_bestand (string bestandnaam, vector<Track>& liedjes)
+{
+    // PRE
+    assert(true);
+    // POST
+    ifstream nummersDBS (bestandnaam.c_str());
+    if (!nummersDBS)
+    {
+        cout << "Kon '" << bestandnaam << "' niet openen." << endl;
+        return -1;
+    }
+    cout << "Lees '" << bestandnaam << "' in." << endl;
+    int aantal = lees_liedjes (nummersDBS, liedjes);
+    nummersDBS.close();
+    return aantal;
+}
+
+void toon_MuziekDB (vector<Track>& liedjes, int aantalLiedjes)
+{
+    // PRE
+    assert(aantalLiedjes > 0);
+    // POST
+    for (int i = 0 ; i < aantalLiedjes; i++) {
+        cout << i + 1 << ". " << liedjes[i] << endl ;
+    }
+}
+
+void swap(vector<Track>& liedjes, int  i, int  j )
+{
+// pre-condition:
+    assert ( i >= 0 && j >= 0 ) ;  // ... and i < size of array
+    // ... and j < size of array
+// Post-condition: array[i] = old array[j] and array[j] = old array[i]
+    const Track help = liedjes [i];
+    liedjes [i] = liedjes [j] ;
+    liedjes [j] = help;
+}
+
+void dnf(vector<Track>& liedjes, int first, int last, int& red, int& blue)
+{
+    // PRE
+    assert(liedjes.size() > 0);
+    // POST
+    red = first - 1;
+    blue = last + 1;
+    int white = first - 1;
+    const Track PIVOT = liedjes[first+(last-first)/2];
+    while (white < blue - 1){
+        const int NEXT = white + 1;
+        if(liedjes[NEXT] < PIVOT){
+            red++;
+            white++;
+            swap(liedjes, red, NEXT);
+        }
+        else if(liedjes[NEXT] == PIVOT){
+            white++;
+        }
+        else{
+            blue--;
+            swap(liedjes, NEXT, blue);
+        }
+    }
+}
+
+void quicksort(vector<Track>& liedjes, int first, int last, int aantalLiedjes)
+{
+    // PRE
+    assert(aantalLiedjes > 0);
+    // POST
+    if (first >= last) return;
+    else {
+        int red, blue;
+        dnf(liedjes, first, last, red, blue);
+        quicksort(liedjes, first, red, aantalLiedjes);
+        quicksort(liedjes, blue, last, aantalLiedjes);
+    }
+}
+
+/* PART 3
+void sort(vector<El>& v, int n)
+{
+    // PRE
+    assert(v.size() > 0);
+    // POST
+
+    // Tail-recursion
+    if(n > 1){
+        const int POS = largest(v, 0, n - 1);
+        swap(v, POS, n - 1);
+        sort(v, n - 1);
+    }
+    // Iterative
+    while(n > 1){
+        const int POS = largest(v, 0, n - 1);
+        swap(v, POS, n - 1);
+        n - 1;
+    }
+}
+
+int largest(vector<El>& v, int low, int up)
+{
+    // PRE
+    assert(v.size() > 0);
+    // POST
+
+    // Middle-recursion
+    if(low >= up)
+        return low;
+    else{
+        const int POS = largest(v, low + 1, up);
+        if(v[low] > v[POS])
+            return low;
+        else
+            return POS;
+    }
+    // Iterative
+    vector<El> stack;
+    while(low < up){
+        low + 1;
+        stack.push_back(v[low]);
+    }
+    if(low >= up)
+        return low;
+    while(stack.size() > 0){
+        int buf = stack[stack.size() - 1];
+        stack.pop_back();
+        if(v[low] > buf)
+            return low = buf;
+    }
+    return buf;
+}
+*/
+
+int main()
+{
+    vector<Track> liedjes;
+    int aantalLiedjes = lees_bestand("Nummers.txt", liedjes);
+    cout << aantalLiedjes << " nummers gevonden.\n";
+    quicksort(liedjes, 0, aantalLiedjes, aantalLiedjes);
+    toon_MuziekDB(liedjes, aantalLiedjes);
+    return 0;
+}
