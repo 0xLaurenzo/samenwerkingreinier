@@ -1,3 +1,5 @@
+#define NDEBUG
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -14,6 +16,8 @@ Laurens Kubat,      s4626249, Informatica
 
 Opmerking: onze sorteeralgoritmen sorteren op ASCII waarden in de Track strings, en niet alfabetisch.
 */
+
+int counter;
 
 struct Length
 {
@@ -50,6 +54,7 @@ bool operator==(const Length& a, const Length& b)
 
 bool operator<(const Track& a, const Track& b)
 {
+    counter++;
     /*
     //Sort on track time
     if (a.time < b.time)
@@ -74,6 +79,7 @@ bool operator<(const Track& a, const Track& b)
 
 bool operator==(const Track& a, const Track& b)
 {
+    counter++;
     /*
     // Track time
     return (a.time == b.time && a.artist == b.artist && a.title == b.title && a.cd == b.cd);
@@ -189,7 +195,7 @@ void toon_MuziekDB (vector<Track>& liedjes, int aantalLiedjes)
 void swap(vector<Track>& liedjes, int  i, int  j )
 {
 // pre-condition:
-    assert ( i >= 0 && j >= 0 ) ;  // ... and i < size of array
+    //assert ( i >= 0 && j >= 0 ) ;  // ... and i < size of array
     // ... and j < size of array
 // Post-condition: array[i] = old array[j] and array[j] = old array[i]
     const Track help = liedjes [i];
@@ -200,7 +206,7 @@ void swap(vector<Track>& liedjes, int  i, int  j )
 void dnf(vector<Track>& liedjes, int first, int last, int& red, int& blue)
 {
     // PRE
-    assert(liedjes.size() > 0);
+    //assert(liedjes.size() > 0);
     // POST
     red = first - 1;
     blue = last + 1;
@@ -226,7 +232,7 @@ void dnf(vector<Track>& liedjes, int first, int last, int& red, int& blue)
 void quicksort(vector<Track>& liedjes, int first, int last, int aantalLiedjes)
 {
     // PRE
-    assert(aantalLiedjes > 0);
+    //assert(aantalLiedjes > 0);
     // POST
     if (first >= last) return;
     else {
@@ -292,12 +298,46 @@ int largest(vector<El>& v, int low, int up)
 }
 */
 
+/* BONUS
+Insertion: 31597885
+Selection: 15806253
+Bubble:    402228
+Heap Sort: 259931
+Quicksort: 100757
+
+As we can see, Quicksort (DNF) is by far the most efficient as it uses
+the least amount of comparisons in order to sort the database.
+
+The less efficient algorithms make far more comparisons, often since they have to compare values in
+(part of) the entire vector in order to determine which values are larger than the current one.
+*/
+
 int main()
 {
+    int choice;
     vector<Track> liedjes;
     int aantalLiedjes = lees_bestand("Nummers.txt", liedjes);
     cout << aantalLiedjes << " nummers gevonden.\n";
-    quicksort(liedjes, 0, aantalLiedjes, aantalLiedjes);
-    toon_MuziekDB(liedjes, aantalLiedjes);
+    cout << endl;
+    cout << "Wil je:\n";
+    cout << "[1] database sorteren?\n";
+    cout << "[2] aantal vergelijkingen weergeven?\n";
+    cin >> choice;
+    cout << endl;
+    switch(choice){
+        case 1 :{
+            quicksort(liedjes, 0, aantalLiedjes, aantalLiedjes);
+            toon_MuziekDB(liedjes, aantalLiedjes);
+            break;
+        }
+        case 2 :{
+            counter = 0;
+            quicksort(liedjes, 0, aantalLiedjes, aantalLiedjes);
+            cout << counter << " vergelijkingen gemaakt.\n";
+            break;
+        }
+        default:
+            cout << "Huh?" << endl;
+    }
     return 0;
 }
