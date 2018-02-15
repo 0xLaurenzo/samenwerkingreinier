@@ -1,0 +1,2 @@
+commands used for exercise 1:
+echo, cat, mv, mkdir, cd, ls, emacs

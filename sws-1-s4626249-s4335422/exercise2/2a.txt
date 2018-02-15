@@ -1,0 +1,1 @@
+Genome.txt contains GATTACA 3 times. This answer was found by first removing all endline charactes from the file by using the tr -d command. After which the amount of occurences were shown using grep -o GATTACA. The results of this command were counted.
