@@ -6,36 +6,30 @@
 package assignment2;
 
 import java.util.Scanner;
+
 /**
  *
  * @author Laurens
  */
-public class Assignment2 {
+public class Hangman{
+    private String word;
+    private StringBuilder attempt;
+    private StringBuilder triedLetters;
+    private int tries;
+       
+    
+    WordReader wr = new WordReader("Words.txt");
 
-    public static void main(String[] args) {
+    public Hangman(){
+        this.word = wr.wordReader();
         
     }
     
-}
-
-public class Hangman{
-    private StringBuilder word;
-    private WordReader wr;
-    private StringBuilder attempt;
-    private StringBuilder triedLetters;
-            
-    public Hangman(){
-        wr = new WordReader("Words.txt");
-        this.word = wr.getWord;
-        this.attempt = attempt;
-        this.triedLetters = triedLetters;
+    public Hangman(String word){
+        this.word = word;
+        
     }
     
-    public Hangman(StringBuilder word){
-        this.word = word;
-        this.attempt = attempt;
-        this.triedLetters = triedLetters;
-    }
     
     public StringBuilder MakeDottedLine(){
         /* This function makes a dotted line(word) which is the same size as
@@ -43,19 +37,23 @@ public class Hangman{
         for (int i = 0; i < word.length(); i++){
             this.attempt.append('.');
         }
+        return this.attempt;
     }
     
     public void PlayHangman(){
-        int tries = 0;
         char letterTry;
         Scanner scan = new Scanner(System.in);
         boolean notFinished = true;
+        tries = 0;
         while (tries < 10 || notFinished){
             System.out.println("Enter a letter and press enter to try it.");
             letterTry = scan.next().charAt(0);
-            
+            TryLetter(letterTry);
             notFinished = !WordFinished();
-            tries++;    
+            System.out.println("You have " + this.tries + " tries left.");
+            System.out.println("the currently known word is: " + this.attempt);
+            System.out.println("The letters you tried are: " + 
+                    this.triedLetters);
         }
     }
     
@@ -70,6 +68,7 @@ public class Hangman{
     
     public StringBuilder TryLetter(char letter){
         String bufferattempt = this.attempt.toString();
+        boolean letterFound = false;
         for (int i = 0; i < triedLetters.length(); i++){
             if (triedLetters.charAt(i) == letter){
             System.out.println("This letter has already been tried");
@@ -79,8 +78,14 @@ public class Hangman{
         for (int i = 0; i < word.length(); i++){
             char test = word.charAt(i);
             if (test == letter){
+                letterFound = true;
                 this.attempt = this.attempt.replace(i, i + 1, bufferattempt);
+                System.out.println(letter + " is in the word.");
             }
+        }
+        if (!letterFound){
+            System.out.println(letter + " is not in the word.");
+            this.tries++;
         }
         this.triedLetters.append(letter);
         return this.attempt;
