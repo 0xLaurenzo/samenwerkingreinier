@@ -1,3 +1,5 @@
+package assignment2;
+
 import java.util.Scanner;
 import java.util.Random;
 import java.io.FileReader;
