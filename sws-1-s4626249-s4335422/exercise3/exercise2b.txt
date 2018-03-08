@@ -1,0 +1,1 @@
+No, it is not the same. This is because the size of the heap constantly changes depending on how much is needed.

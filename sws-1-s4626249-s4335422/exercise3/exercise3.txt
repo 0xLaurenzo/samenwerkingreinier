@@ -1,0 +1,6 @@
+(a): {23, 42, 5, 128}, since &x is the content stored at memory location x. Also 1<<7=128.
+(b): 0x7fffb3cc3b21, since it's the memory location of x incremented by one.
+(c): {24, 43, 6, 129}, since it's the values stored at memory location x, incremented by one.
+(d): 0x7fffb3cc3b20, since *x is a pointer to x's memory location.
+(e): 0x7fffb3cc3b25, since it's x's memory location incremented by x[2]'s value, which is 5.
+(f): 0x7fffb3cc3b20 + 0x7fffb3cc3b23 = 0xffff67987643.
