@@ -1,0 +1,4 @@
+Running the program on Lilo didn't do too much, until a few people started running it. Then Lilo became very, very, slow.
+Running the program locally crashed my laptop in about 2 seconds. The problem is that the memory of the matrices m and mt
+is freed, but the memory taken up by their contents (m[i][j] and mt[i][j]) is not freed. This results in the fact that
+every loop more memory is taken up by m[i][j] and mt[i][j]. This ends up taking up all available RAM.
