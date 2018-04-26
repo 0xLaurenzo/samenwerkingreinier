@@ -6,13 +6,25 @@
 package assignment9;
 
 /**
- *
- * @author Laurens
+ * @author Reinier Sanders s4335422
+ * @author Laurens Kubat s4626249
  */
 public enum BinOp implements Form{
-    AndOp ( "/\\" ),
-    OrOp ( "\\/" ),
-    ImpliesOp ( "=>" ) ;
+    AndOp ( "/\\" ){
+        public boolean apply(boolean a1, boolean a2){
+            return a1 && a2;
+        }
+    },
+    OrOp ( "\\/" ){
+        public boolean apply(boolean a1, boolean a2){
+            return a1 || a2;
+        }
+    },
+    ImpliesOp ( "=>" ){
+        public boolean apply(boolean a1, boolean a2){
+            return !a1 || a2;
+        }
+    };
     
     private String string;
     
@@ -26,7 +38,7 @@ public enum BinOp implements Form{
     }
     
     @Override
-    public void accept(FormVisitor v){
-        v.visit(this);
+    public boolean accept(FormVisitor v){
+        return v.visit(this);
     }
 }
