@@ -6,10 +6,10 @@
 package assignment9;
 
 /**
- *
- * @author Laurens
+ * @author Reinier Sanders s4335422
+ * @author Laurens Kubat s4626249
  */
 public interface Form {
-    void accept( FormVisitor visitor );
+    boolean accept( FormVisitor visitor );
     Form getId();
 }
