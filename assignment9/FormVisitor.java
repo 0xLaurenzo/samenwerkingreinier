@@ -6,15 +6,15 @@
 package assignment9;
 
 /**
- *
- * @author Laurens
- * @author reiniersanders
+ * @author Reinier Sanders s4335422
+ * @author Laurens Kubat s4626249
  */
-public interface FormVisitor {
-    void visit( BinOpForm form );
-    void visit( NotForm form );
-    void visit( AtomForm form );
-    void visit( AtomVal form );
-    void visit( BinOp form);
-    void visit( NotSym form);
+public interface FormVisitor{
+    boolean visit( BinOpForm form );
+    boolean visit( NotForm form );
+    boolean visit( AtomForm form );
+    boolean visit( AtomVal form );
+    boolean visit( BinOp form);
+    boolean visit( NotSym form);
+    boolean visit( EvalFormVisitor form);
 }
