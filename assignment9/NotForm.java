@@ -7,14 +7,28 @@ package assignment9;
 
 /**
  *
- * @author Laurens
+ * @author reiniersanders
  */
-public class NotForm {
-
+public class NotForm implements Form{
+    private NotSym sym;
+    private Form operand;
     
-    
-    Object getOperand() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public NotForm(NotSym sym, Form operand){
+        this.sym = sym;
+        this.operand = operand;
     }
     
+    @Override
+    public boolean accept(FormVisitor v){
+        return v.visit(this);
+    }
+    
+    @Override
+    public Form getId(){
+        return this;
+    }
+    
+    Form getOperand() {
+        return operand;
+    }
 }
