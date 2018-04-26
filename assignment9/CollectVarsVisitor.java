@@ -29,12 +29,24 @@ public class CollectVarsVisitor implements FormVisitor {
     form.getOperand().accept( this );
     }
 
+    @Override
     public void visit( AtomForm form ) {
         if ( ! collectedVariables.contains( form.getId() )) {
             collectedVariables.add( form.getId() );
         }
     }
-    public void visit( BasicForm form ) {
+    
+    public void visit( BinOp form ) {
+       if ( ! collectedVariables.contains( form.getId() )) {
+            collectedVariables.add( form.getId() );
+        } 
+    }
+    
+    @Override
+    public void visit( AtomVal form ) {
+        if ( ! collectedVariables.contains( form.getId() )) {
+            collectedVariables.add( form.getId() );
+        }
     }
     
     public List<String> getCollectedVariables() {

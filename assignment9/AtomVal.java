@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package assignment.pkg9;
+package assignment9;
 
 /**
  *
  * @author reiniersanders
  */
-public enum AtomVal implements Form{
+public enum AtomVal implements Form {
     TrueOp ( "T" ),
     FalseOp ( "F" );
     
@@ -24,7 +24,7 @@ public enum AtomVal implements Form{
     }
     
     @Override
-    public boolean accept(FormVisitor v){
-        return v.visit(this);
+    public void accept(FormVisitor v){
+        v.visit(this);
     }
 }

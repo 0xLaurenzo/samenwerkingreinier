@@ -13,6 +13,6 @@ public interface FormVisitor {
     void visit( BinOpForm form );
     void visit( NotForm form );
     void visit( AtomForm form );
-    void visit( BasicForm form );
+    void visit( AtomVal form );
     void visit( BinOp form);
 }

@@ -19,8 +19,8 @@ public class NotForm implements Form{
     }
     
     @Override
-    public boolean accept(FormVisitor v){
-        return v.visit(this);
+    public void accept(FormVisitor v){
+        v.visit(this);
     }
     
     @Override
