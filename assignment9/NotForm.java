@@ -6,8 +6,8 @@
 package assignment9;
 
 /**
- *
- * @author reiniersanders
+ * @author Reinier Sanders s4335422
+ * @author Laurens Kubat s4626249
  */
 public class NotForm implements Form{
     private NotSym sym;
@@ -19,16 +19,16 @@ public class NotForm implements Form{
     }
     
     @Override
-    public void accept(FormVisitor v){
-        v.visit(this);
-    }
-    
-    public Form getOperand(){
-        return this.operand;
+    public boolean accept(FormVisitor v){
+        return v.visit(this);
     }
     
     @Override
     public Form getId(){
         return this;
+    }
+    
+    Form getOperand() {
+        return operand;
     }
 }
