@@ -6,8 +6,8 @@
 package assignment9;
 
 /**
- *
- * @author Laurens
+ * @author Reinier Sanders  s4335422
+ * @author Laurens Kubat    s4626249
  */
 public class Assignment9 {
 
@@ -15,7 +15,6 @@ public class Assignment9 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        
     }
-    
 }
