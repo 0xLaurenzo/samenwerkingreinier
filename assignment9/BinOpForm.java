@@ -6,8 +6,8 @@
 package assignment9;
 
 /**
- *
- * @author Laurens
+ * @author Reinier Sanders s4335422
+ * @author Laurens Kubat s4626249
  */
 public class BinOpForm implements Form {
     private BinOp op;
@@ -22,7 +22,7 @@ public class BinOpForm implements Form {
 
     @Override
     public Form getId(){
-        return this.op.getId();
+        return this.op;
     }
     
     public Form getLeft(){
@@ -33,8 +33,12 @@ public class BinOpForm implements Form {
         return rightOperand;
     }
     
+    public Form getOp(){
+        return op;
+    }
+    
     @Override
-    public void accept( FormVisitor v ) {
-        v.visit( this );
+    public boolean accept( FormVisitor v ) {
+        return v.visit( this );
     }
 }
