@@ -25,8 +25,8 @@ public enum BinOp implements Form{
         return this;
     }
     
+    @Override
     public void accept(FormVisitor v){
         v.visit(this);
     }
-    
 }

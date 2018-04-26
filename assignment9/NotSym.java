@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package assignment.pkg9;
+package assignment9;
 
 /**
  *
@@ -24,7 +24,7 @@ public enum NotSym implements Form{
     }
     
     @Override
-    public boolean accept(FormVisitor v){
-        return v.visit(this);
+    public void accept(FormVisitor v){
+        v.visit(this);
     }
 }

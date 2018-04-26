@@ -19,6 +19,7 @@ public enum AtomVal implements Form {
         this.string = string;
     }
     
+    @Override
     public Form getId(){
         return this.TrueOp;
     }
