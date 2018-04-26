@@ -10,9 +10,9 @@ package assignment9;
  * @author reiniersanders
  */
 public class AtomForm implements Form {
-    private AtomOp value;
+    private AtomVal value;
     
-    public AtomForm(AtomOp value){
+    public AtomForm(AtomVal value){
         this.value = value;
     }
     
