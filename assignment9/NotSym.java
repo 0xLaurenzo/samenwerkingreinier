@@ -6,11 +6,15 @@
 package assignment9;
 
 /**
- *
- * @author reiniersanders
+ * @author Reinier Sanders s4335422
+ * @author Laurens Kubat s4626249
  */
 public enum NotSym implements Form{
-    NotSym( "<>" );
+    NotSym( "<>" ){
+        public boolean apply(boolean a){
+            return !a;
+        }
+    };
     
     private String string;
     
@@ -24,7 +28,7 @@ public enum NotSym implements Form{
     }
     
     @Override
-    public void accept(FormVisitor v){
-        v.visit(this);
+    public boolean accept(FormVisitor v){
+        return v.visit(this);
     }
 }
