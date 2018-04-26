@@ -9,8 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
- * @author Laurens
+ * @author Reinier Sanders s4335422
+ * @author Laurens Kubat s4626249
  */
 public class CollectVarsVisitor implements FormVisitor {
     private List<String> collectedVariables;
@@ -38,14 +38,14 @@ public class CollectVarsVisitor implements FormVisitor {
     
     public void visit( BinOp form ) {
        if ( ! collectedVariables.contains( form.getId() )) {
-            collectedVariables.add(  form.getId() );
+            collectedVariables.add( form.getId() );
         } 
     }
     
     @Override
     public void visit( AtomVal form ) {
         if ( ! collectedVariables.contains( form.getId() )) {
-            collectedVariables.add(  form.getId() );
+            collectedVariables.add( form.getId() );
         }
     }
     

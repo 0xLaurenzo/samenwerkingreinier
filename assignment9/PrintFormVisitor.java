@@ -6,8 +6,8 @@
 package assignment9;
 
 /**
- *
- * @author Laurens
+ * @author Reinier Sanders s4335422
+ * @author Laurens Kubat s4626249
  */
 public class PrintFormVisitor implements FormVisitor {
     private StringBuilder string;
@@ -15,28 +15,28 @@ public class PrintFormVisitor implements FormVisitor {
     
 
     @Override
-    public void visit(BinOpForm form) {
+    public boolean visit(BinOpForm form) {
        string.append("(" + form.getLeft().accept(this) 
                + form.getId()+ form.getRight().accept(this) + ")"); 
     }
 
     @Override
-    public void visit(NotForm form) {
+    public boolean visit(NotForm form) {
         string.append("~" + form.getOperand().accept( this ));
     }
 
     @Override
-    public void visit(AtomForm form) {
+    public boolean visit(AtomForm form) {
         string.append(form.getId());
     }
 
     @Override
-    public void visit(AtomVal form) {
+    public boolean visit(AtomVal form) {
         string.append(form.getId());
     }
 
     @Override
-    public void visit(BinOp form) {
+    public boolean visit(BinOp form) {
         string.append(form.getId());
     }
         
