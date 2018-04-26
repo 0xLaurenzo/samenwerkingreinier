@@ -6,12 +6,20 @@
 package assignment9;
 
 /**
- *
- * @author reiniersanders
+ * @author Laurens Kubat s4626249
+ * @author Reinier Sanders s4335422
  */
 public enum AtomVal implements Form {
-    TrueOp ( "T" ),
-    FalseOp ( "F" );
+    TrueOp ( "T" ){
+        public boolean apply(){
+            return true;
+        }
+    },
+    FalseOp ( "F" ){
+        public boolean apply(){
+            return false;
+        }
+    };
     
     private String string;
     
@@ -21,11 +29,11 @@ public enum AtomVal implements Form {
     
     @Override
     public Form getId(){
-        return this.TrueOp;
+        return this;
     }
     
     @Override
-    public void accept(FormVisitor v){
-        v.visit(this);
+    public boolean accept(FormVisitor v){
+        return v.visit(this);
     }
 }
