@@ -7,12 +7,21 @@ package assignment9;
 
 /**
  *
- * @author Laurens
+ * @author reiniersanders
  */
-public class AtomForm {
-
-    Object getId() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+public class AtomForm implements Form {
+    private AtomOp value;
+    
+    public AtomForm(AtomOp value){
+        this.value = value;
     }
     
+    public Form getId(){
+        return this;
+    }
+    
+    @Override
+    public boolean accept(FormVisitor v){
+        return v.visit(this);
+    }
 }
