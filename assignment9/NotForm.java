@@ -23,12 +23,12 @@ public class NotForm implements Form{
         v.visit(this);
     }
     
+    public Form getOperand(){
+        return this.operand;
+    }
+    
     @Override
     public Form getId(){
         return this;
-    }
-    
-    Form getOperand() {
-        return operand;
     }
 }

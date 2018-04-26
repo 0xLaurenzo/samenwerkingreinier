@@ -38,14 +38,14 @@ public class CollectVarsVisitor implements FormVisitor {
     
     public void visit( BinOp form ) {
        if ( ! collectedVariables.contains( form.getId() )) {
-            collectedVariables.add( form.getId() );
+            collectedVariables.add(  form.getId() );
         } 
     }
     
     @Override
     public void visit( AtomVal form ) {
         if ( ! collectedVariables.contains( form.getId() )) {
-            collectedVariables.add( form.getId() );
+            collectedVariables.add(  form.getId() );
         }
     }
     

@@ -22,7 +22,7 @@ public class BinOpForm implements Form {
 
     @Override
     public Form getId(){
-        return this.op;
+        return this.op.getId();
     }
     
     public Form getLeft(){

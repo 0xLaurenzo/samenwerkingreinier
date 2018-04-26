@@ -16,8 +16,9 @@ public class AtomForm implements Form {
         this.value = value;
     }
     
+    @Override
     public Form getId(){
-        return this;
+        return value.getId();
     }
     
     @Override
@@ -25,3 +26,4 @@ public class AtomForm implements Form {
         v.visit(this);
     }
 }
+

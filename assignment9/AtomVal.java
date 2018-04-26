@@ -20,7 +20,7 @@ public enum AtomVal implements Form {
     }
     
     public Form getId(){
-        return this;
+        return this.TrueOp;
     }
     
     @Override
