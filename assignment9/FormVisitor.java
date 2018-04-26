@@ -8,6 +8,7 @@ package assignment9;
 /**
  *
  * @author Laurens
+ * @author reiniersanders
  */
 public interface FormVisitor {
     void visit( BinOpForm form );
@@ -15,4 +16,5 @@ public interface FormVisitor {
     void visit( AtomForm form );
     void visit( AtomVal form );
     void visit( BinOp form);
+    void visit( NotSym form);
 }
