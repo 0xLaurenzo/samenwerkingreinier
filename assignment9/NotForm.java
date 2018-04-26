@@ -10,5 +10,9 @@ package assignment9;
  * @author Laurens
  */
 public class NotForm {
+
+    Object getOperand() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
