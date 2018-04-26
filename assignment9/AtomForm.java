@@ -16,6 +16,7 @@ public class AtomForm implements Form {
         this.value = value;
     }
     
+    @Override
     public Form getId(){
         return this;
     }
