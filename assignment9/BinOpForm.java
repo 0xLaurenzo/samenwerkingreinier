@@ -10,25 +10,31 @@ package assignment9;
  * @author Laurens
  */
 public class BinOpForm implements Form {
-    private BinOpForm op;
+    private BinOp op;
     private Form leftOperand;
     private Form rightOperand;
-    public BinOpForm ( BinOpForm op, Form left, Form right ) {
-    this.op = op;
-    this.leftOperand = left;
-    this.rightOperand = right;
-}
+    
+    public BinOpForm ( BinOp op, Form left, Form right ) {
+        this.op = op;
+        this.leftOperand = left;
+        this.rightOperand = right;
+    }
 
     @Override
-    public boolean accept( FormVisitor v ) {
-        v.visitBinOpForm( this );
+    public Form getId(){
+        return this.op;
     }
-
-    Object getRight() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public Form getLeft(){
+        return this.leftOperand;
     }
-
-    Object getLeft() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public Form getRight(){
+        return rightOperand;
+    }
+    
+    
+    public void accept( FormVisitor v ) {
+        v.visit( this );
     }
 }

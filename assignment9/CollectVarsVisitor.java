@@ -14,25 +14,27 @@ import java.util.List;
  */
 public class CollectVarsVisitor implements FormVisitor {
     private List<String> collectedVariables;
+    
     public CollectVarsVisitor() {
-    collectedVariables = new LinkedList<> ();
+        collectedVariables = new LinkedList<> ();
     }
     
-    public boolean visit( BinOpForm form ) {
-    form.getLeft().accept( this );
-    form.getRight().accept( this );
+    @Override
+    public void visit( BinOpForm form ) {
+        form.getLeft().accept( this );
+        form.getRight().accept( this );
     }
 
-    public boolean visit( NotForm form ){
+    public void visit( NotForm form ){
     form.getOperand().accept( this );
     }
 
-    public boolean visit( AtomForm form ) {
+    public void visit( AtomForm form ) {
         if ( ! collectedVariables.contains( form.getId() )) {
             collectedVariables.add( form.getId() );
         }
     }
-    public boolean visit( BasicForm form ) {
+    public void visit( BasicForm form ) {
     }
     
     public List<String> getCollectedVariables() {

@@ -10,5 +10,6 @@ package assignment9;
  * @author Laurens
  */
 public interface Form {
-    boolean accept( FormVisitor visitor );
+    void accept( FormVisitor visitor );
+    Form getId();
 }

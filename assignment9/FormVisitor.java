@@ -10,8 +10,9 @@ package assignment9;
  * @author Laurens
  */
 public interface FormVisitor {
-    boolean visit( BinOpForm form );
-    boolean visit( NotForm form );
-    boolean visit( AtomForm form );
-    boolean visit( BasicForm form );
+    void visit( BinOpForm form );
+    void visit( NotForm form );
+    void visit( AtomForm form );
+    void visit( BasicForm form );
+    void visit( BinOp form);
 }
