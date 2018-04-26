@@ -6,8 +6,8 @@
 package assignment9;
 
 /**
- *
- * @author reiniersanders
+ * @author Laurens Kubat s4626249
+ * @author Reinier Sanders s4335422
  */
 public class AtomForm implements Form {
     private AtomVal value;
@@ -16,14 +16,17 @@ public class AtomForm implements Form {
         this.value = value;
     }
     
-    @Override
-    public Form getId(){
-        return value.getId();
+    public Form getValue(){
+        return value;
     }
     
     @Override
-    public void accept(FormVisitor v){
-        v.visit(this);
+    public Form getId(){
+        return this;
+    }
+    
+    @Override
+    public boolean accept(FormVisitor v){
+        return v.visit(this);
     }
 }
-
