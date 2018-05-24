@@ -39,8 +39,6 @@ public class FileFinder implements Runnable {
                     currentFile = file;
                     Thread t = new Thread(this);
                     t.start();
-                } else {
-                    System.out.println("file not found");
                 }
             }
         }
