@@ -1,39 +1,51 @@
-package assignment13;
+package assignment.pkg13;
 
 import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
- *
- * @author pieterkoopman
+ * @author Reinier Sanders  s4335422
+ * @author Laurens Kubat    s4626249
  */
 public class MergeSort implements Runnable{
-  /**
-   * sort the given array in O(N log N) time
-   * The array is split in two parts of equal size. 
-   * These parts are sort recursively and merged.
-   * @param array 
-   */
-   private int[][] halves;
-   private int curHalf;
+    /**
+    * sort the given array in O(N log N) time
+    * The array is split in two parts of equal size. 
+    * These parts are sort recursively and merged.
+    * @param array 
+    */
+    private int[][] halves;
+    private int curHalf;
+    private int min = 0;
+    private int max = 1000;
     
-    
-    public void multiSort(int [] array) {
-        if (array.length < 1000) {
-            sort(array);
-        } else {
-            curHalf = 0;
-            halves[0] = Arrays.copyOf(array, array.length / 2);
-            halves[1] = Arrays.copyOfRange(array, array.length / 2, array.length);
-            Thread t1 = new Thread();
-            Thread t2 = new Thread();
-            t1.start();
-            curHalf++;
-            t2.start();
-            merge(halves[0], halves[1], array);
+    public void randomize(int[] array){
+        for(int i = 0; i < array.length; i++){
+            int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
+            array[i] = randomNum;
         }
     }
     
-  
+    public void multiSort(int [] array) {
+        while(!isSorted(array)){
+            if (array.length < 1000) {
+                sort(array);
+            } else {
+                /* Fix this, array(s) get out of bounds, null pointer exception
+                curHalf = 0;
+                halves[curHalf] = Arrays.copyOf(array, array.length / 2);
+                halves[curHalf + 1] = Arrays.copyOfRange(array, array.length / 2, array.length);
+                Thread t1 = new Thread();
+                Thread t2 = new Thread();
+                t1.start();
+                curHalf++;
+                t2.start();
+                merge(halves[curHalf + 2], halves[curHalf + 3], array);
+                */
+            }
+        }
+    }
+    
     public static void sort(int [] array) {
     if (array.length > 1) {
       int [] firstHalf = Arrays.copyOf(array, array.length / 2);
@@ -78,6 +90,7 @@ public class MergeSort implements Runnable{
         current = i;
       }
     }
+    System.out.println("Array sorted!");
     return true;
   }
 
