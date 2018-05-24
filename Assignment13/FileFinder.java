@@ -1,11 +1,11 @@
-package assignment13;
+package assignment.pkg13;
 
 import java.io.File;
 import java.io.IOException;
 
 /**
- *
- * @author pieterkoopman
+ * @author Reinier Sanders  s4335422
+ * @author Laurens Kubat    s4626249
  */
 public class FileFinder implements Runnable {
     private final File rootDir;
@@ -17,7 +17,7 @@ public class FileFinder implements Runnable {
         rootDir = new File(root);
         curThread = 0;
         if (!(rootDir.exists() && rootDir.isDirectory())) {
-            throw new IOException(root + " is not a directory");
+            throw new IOException(root + " is not a directory.");
         }
     }
     
