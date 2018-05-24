@@ -1,10 +1,10 @@
-package assignment13;
+package assignment.pkg13;
 
 import java.io.IOException;
 
 /**
- *
- * @author pieterkoopman
+ * @author Reinier Sanders  s4335422
+ * @author Laurens Kubat    s4626249
  */
 public class FileFinderTest {
 
@@ -19,7 +19,7 @@ public class FileFinderTest {
     public FileFinderTest() {
         try {
             String goal = "FileFinder.java";
-            String root = "/Users/Laurens/Desktop";
+            String root = "/Users";
             FileFinder ff = new FileFinder(root);
 //            FileFinderSeq ff = new FileFinderSeq(root);
             ff.findFile(goal);
@@ -33,7 +33,7 @@ public class FileFinderTest {
     public static void FileFinderTest() {
         try {
             String goal = "FileFinder.java";
-            String root = "/Users/Laurens/Documents";
+            String root = "/Users";
             FileFinder ff = new FileFinder(root);
 //            FileFinderSeq ff = new FileFinderSeq(root);
             ff.findFile(goal);
