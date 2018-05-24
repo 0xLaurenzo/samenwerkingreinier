@@ -6,14 +6,35 @@ import java.util.Arrays;
  *
  * @author pieterkoopman
  */
-public class MergeSort {
+public class MergeSort implements Runnable{
   /**
    * sort the given array in O(N log N) time
    * The array is split in two parts of equal size. 
    * These parts are sort recursively and merged.
    * @param array 
    */
-  public static void sort(int [] array) {
+   private int[][] halves;
+   private int curHalf;
+    
+    
+    public void multiSort(int [] array) {
+        if (array.length < 1000) {
+            sort(array);
+        } else {
+            curHalf = 0;
+            halves[0] = Arrays.copyOf(array, array.length / 2);
+            halves[1] = Arrays.copyOfRange(array, array.length / 2, array.length);
+            Thread t1 = new Thread();
+            Thread t2 = new Thread();
+            t1.start();
+            curHalf++;
+            t2.start();
+            merge(halves[0], halves[1], array);
+        }
+    }
+    
+  
+    public static void sort(int [] array) {
     if (array.length > 1) {
       int [] firstHalf = Arrays.copyOf(array, array.length / 2);
       sort(firstHalf);
@@ -59,4 +80,9 @@ public class MergeSort {
     }
     return true;
   }
+
+    @Override
+    public void run() {
+        sort(halves[curHalf]);
+    }
 }
