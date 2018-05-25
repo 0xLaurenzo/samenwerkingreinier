@@ -7,7 +7,6 @@ package assignment13;
  */
 
 
-import assignment13.MergeSort;
 import java.util.Random;
 
 /**
@@ -17,13 +16,13 @@ import java.util.Random;
 public class MergeSortTest {
     
     public static void main(String[] args) {
-        int[] data = new int[1000000];
+        int[] data = new int[10000];
         Random random = new Random();
         for (int i = 0; i < data.length; i++) {
             data[i] = random.nextInt(10000);
         }
-        MultiMergeSort merge = new MultiMergeSort();
-        merge.multiMergeSort(data);
+        MergeSort sort = new MergeSort();
+        sort.multiMergeSort(data);
         for (int i = 0; i < data.length; i++) {
             System.out.println(data[i]);
         }        

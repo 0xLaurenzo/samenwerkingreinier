@@ -3,18 +3,44 @@ package assignment13;
 import java.util.Arrays;
 
 /**
- * @author Reinier Sanders  s4335422
- * @author Laurens Kubat    s4626249
+ *
+ * @author pieterkoopman
  */
 public class MergeSort {
-    /**
-    * sort the given array in O(N log N) time
-    * The array is split in two parts of equal size. 
-    * These parts are sort recursively and merged.
-    * @param array 
-    */
+  /**
+   * sort the given array in O(N log N) time
+   * The array is split in two parts of equal size. 
+   * These parts are sort recursively and merged.
+   * @param array 
+   */
     
-    public static void sort(int [] array) {
+    
+    public void multiMergeSort(int[] toSort) {
+            if (toSort.length < 1000) {
+                sort(toSort);
+            } else {
+                int [] firstHalf = Arrays.copyOf(toSort, toSort.length / 2);
+                int [] secondHalf =  Arrays.copyOfRange(toSort, toSort.length / 2, toSort.length);
+                MultiMergeSort m1 = new MultiMergeSort(firstHalf);
+                MultiMergeSort m2 = new MultiMergeSort(secondHalf);
+                Thread t1 = new Thread(m1);
+                Thread t2 = new Thread(m2);
+                t1.start();
+                t2.start();
+                try {
+                    t1.join();
+                    t2.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                merge(firstHalf, secondHalf, toSort);
+                for (int i = 0; i < toSort.length; i++) {
+                    System.out.println(toSort[i]);
+                } 
+            }
+    }
+    
+  public static void sort(int [] array) {
     if (array.length > 1) {
       int [] firstHalf = Arrays.copyOf(array, array.length / 2);
       sort(firstHalf);
@@ -53,13 +79,11 @@ public class MergeSort {
     int current = array[0];
     for (int i: array) {
       if (i < current) {
-          System.out.println("Not sorted at: " + array[i]);
         return false;
       } else {
         current = i;
       }
     }
-    System.out.println("Array sorted!");
     return true;
   }
 }

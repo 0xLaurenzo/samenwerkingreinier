@@ -14,41 +14,18 @@ import java.util.HashMap;
  */
 public class MultiMergeSort implements Runnable {
 
-    private HashMap<Integer, int[]> arrays;
-    private int toGet;
-    private MergeSort sorter;
+    private int[] array;
     
-    public MultiMergeSort(){
-        this.toGet = 0;
-        this.arrays = new HashMap<Integer, int[]>();
-        this.sorter = new MergeSort();
+    public MultiMergeSort(int[] array){
+        this.array = array;
     }
     
-    public void multiMergeSort(int[] toSort) {
-            if (toSort.length < 1000) {
-                sorter.sort(toSort);
-            } else {
-                arrays.put(1, Arrays.copyOf(toSort, toSort.length / 2));
-                arrays.put(2, Arrays.copyOfRange(toSort, toSort.length / 2, toSort.length));
-                Thread t1 = new Thread();
-                Thread t2 = new Thread();
-                t1.start();
-                toGet++;
-                t2.start();
-                sorter.sort(arrays.get(0));
-                sorter.sort(arrays.get(1));
-                try {
-                    t1.join();
-                    t2.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                sorter.merge(arrays.get(0), arrays.get(1), toSort);
-            }
+    public int[] getArray() {
+        return this.array;
     }
-
+    
     @Override
     public void run() {
-        sorter.sort(arrays.get(toGet));
+        MergeSort.sort(array);
     }
 }
