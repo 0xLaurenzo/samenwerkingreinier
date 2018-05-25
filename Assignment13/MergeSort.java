@@ -1,50 +1,18 @@
-package assignment.pkg13;
+package assignment13;
 
 import java.util.Arrays;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author Reinier Sanders  s4335422
  * @author Laurens Kubat    s4626249
  */
-public class MergeSort implements Runnable{
+public class MergeSort {
     /**
     * sort the given array in O(N log N) time
     * The array is split in two parts of equal size. 
     * These parts are sort recursively and merged.
     * @param array 
     */
-    private int[][] halves;
-    private int curHalf;
-    private int min = 0;
-    private int max = 1000;
-    
-    public void randomize(int[] array){
-        for(int i = 0; i < array.length; i++){
-            int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
-            array[i] = randomNum;
-        }
-    }
-    
-    public void multiSort(int [] array) {
-        while(!isSorted(array)){
-            if (array.length < 1000) {
-                sort(array);
-            } else {
-                /* Fix this, array(s) get out of bounds, null pointer exception
-                curHalf = 0;
-                halves[curHalf] = Arrays.copyOf(array, array.length / 2);
-                halves[curHalf + 1] = Arrays.copyOfRange(array, array.length / 2, array.length);
-                Thread t1 = new Thread();
-                Thread t2 = new Thread();
-                t1.start();
-                curHalf++;
-                t2.start();
-                merge(halves[curHalf + 2], halves[curHalf + 3], array);
-                */
-            }
-        }
-    }
     
     public static void sort(int [] array) {
     if (array.length > 1) {
@@ -85,6 +53,7 @@ public class MergeSort implements Runnable{
     int current = array[0];
     for (int i: array) {
       if (i < current) {
+          System.out.println("Not sorted at: " + array[i]);
         return false;
       } else {
         current = i;
@@ -93,9 +62,4 @@ public class MergeSort implements Runnable{
     System.out.println("Array sorted!");
     return true;
   }
-
-    @Override
-    public void run() {
-        sort(halves[curHalf]);
-    }
 }
