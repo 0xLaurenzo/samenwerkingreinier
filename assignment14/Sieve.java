@@ -5,39 +5,39 @@
  */
 package assignment14;
 /*
- *
- *
- * @author Laurens
- *
+ * @author Reinier Sanders  s4335422
+ * @author Laurens Kubat    s4626249
  */
 public class Sieve implements Runnable {
-    private int toFilter;
     private Buffer buf;
     private Buffer output;
+    private int toFilter;
     
-    public Sieve(int toFilter, Buffer buf, Buffer output) {
-        this.toFilter = toFilter;
+    public Sieve(int toFilter, Buffer buf, Buffer output){
         this.buf = buf;
         this.output = output;
-    }
-    
-    public void Filter() {
-        while (true) {
-            if (!buf.isEmpty()) {
-                int intbuf = buf.get();
-                if (intbuf%toFilter != 0) {
-                    if (!output.isFull()) {
-                        output.put(intbuf);
-                    }
-                }
-            }
-        }
+        this.toFilter = toFilter;
     }
 
+    public int Filter(){
+        boolean isPrime[] = new boolean[toFilter+1];
+        for(int i = 0; i < toFilter; i++)
+            isPrime[i] = true;
+        for(int i = 2; i*i <= toFilter; i++){
+            if(isPrime[i]){
+                for(int j = i*2; j <= toFilter; j += i)
+                    isPrime[j] = false;
+            }
+        }
+        for(int i = 2; i <= toFilter; i++){
+            if(isPrime[i])
+                return i;
+        }
+        return 0;
+    }
+    
     @Override
     public void run() {
         Filter();
     }
-    
 }
-
