@@ -13,9 +13,12 @@ public class Solver
 {
    // A queue for maintaining graphs that are not visited yet.
     Queue<Configuration> toExamine;
+    Collection<Configuration> seen;
 
     public Solver( Configuration g ) {
-        throw new UnsupportedOperationException( "Solver: not supported yet." );
+        this.toExamine = new PriorityQueue<>();
+        this.seen= new ArrayList<>();
+        toExamine.add(g);
     }
 
     /**
@@ -27,12 +30,16 @@ public class Solver
         while ( ! toExamine.isEmpty() ) {
             Configuration next = toExamine.remove();
             if ( next.isSolution() ) {
-                return "Success!";
+                return "Success! \n" + next.toString();
             } else {
                 for ( Configuration succ : next.successors() ) {
-                    toExamine.add(succ);
+                    if (!seen.contains(succ)){
+                        toExamine.add(succ);
+                        seen.add(succ);
+                    }
                 }
-            }
+            }                    
+
         }
         return "Failure!";
     }

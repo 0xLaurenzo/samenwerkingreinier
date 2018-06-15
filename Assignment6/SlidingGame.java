@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * @author Pieter Koopman, Sjaak Smetsers
@@ -19,6 +21,8 @@ public class SlidingGame implements Configuration {
      */
     private int[][] board;
     private int holeX, holeY;
+    private SlidingGame parent;
+    
 
     /**
      * A constructor that initializes the board with the specified array
@@ -30,7 +34,7 @@ public class SlidingGame implements Configuration {
         board = new int[N][N];
 
         assert start.length == N * N : "Length of specified board incorrect";
-
+        this.parent = null;
         for (int p = 0; p < start.length; p++) {
             board[p % N][p / N] = start[p];
             if (start[p] == HOLE) {
@@ -40,24 +44,23 @@ public class SlidingGame implements Configuration {
         }
     }
     
-    public SlidingGame swap(int holeX, int holeY, int newX, int newY){
-        int buf = board[holeX][holeY];
-        board[holeX][holeY] = board[newX][newY];
-        board[newX][newY] = buf;
-        ArrayList<Integer> retList = new ArrayList<Integer>();
-        for (int i = 0; i < N; i++){
-            for (int j = 0; j < N; j++){
-                retList.add(board[i][j]);
+    public SlidingGame(SlidingGame parent) {
+        this.parent = parent;
+        this.board = new int[N][N];
+        this.holeX = parent.holeX;
+        this.holeY = parent.holeY;
+        
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                this.board[i][j] = parent.board[i][j];
             }
         }
-        int[] result = new int[retList.size()];
-        int index = 0;
-        for(int val:retList){
-            result[index++] = val;
-        }
-        return new SlidingGame(result);
     }
     
+    public int getCord(int xCord, int yCord){
+        return board[xCord][yCord];
+    }
+
     /**
      * Converts a board into a printable representation. The hole is displayed
      * as a space
@@ -79,40 +82,109 @@ public class SlidingGame implements Configuration {
 
     @Override
     public boolean equals(Object o) {
-        throw new UnsupportedOperationException("equals : not supported yet.");
+        if(!(o instanceof SlidingGame)) {
+            throw new RuntimeException("Object type mismatch.");
+        } else {
+            SlidingGame other = (SlidingGame) o;
+            for(int row = 0; row < N; row++) {
+                for(int col = 0; col < N; col++) {
+                    if(this.board[col][row] != other.board[col][row])
+                        return false;
+                }
+            }
+            return true;
+        }
     }
 
+    
     @Override
     public boolean isSolution() {
-        int counter = 1;
-        for (int i = 0; i < N; i++){
-            for(int j = 0; j < N; j++){
-                if(board[i][j] != counter){
-                    return false;
-                }
-                counter++;
+        for(int i = 0; i < SIZE; ++i) {
+            int x = i % N;
+            int y = i / N;
+            if(board[x][y] != i + 1) {
+                return false;
             }
         }
         return true;
     }
-
-    @Override
-    public Collection<Configuration> successors() {
-       ArrayList retList = new ArrayList();  
-       for (Direction dir : Direction.values()){
-            retList.add(this.swap(holeX, holeY, dir.GetDX(), dir.GetDY()));
-        }
-        return retList;
+    
+    public SlidingGame swap(int holeX, int holeY, int newX, int newY){
+        SlidingGame buf = new SlidingGame(this);
+        buf.board[holeX][holeY] = buf.board[newX][newY];
+        buf.board[newX][newY] = HOLE;
+        buf.holeX = newX;
+        buf.holeY = newY;
+        return buf;
     }
 
     @Override
+    public Collection<Configuration> successors() {
+       Collection<Configuration> successors = new ArrayList<>();
+       // swap to left
+       if (this.holeX > 0) {
+           SlidingGame toAdd = this.swap(this.holeX , this.holeY, this.holeX - 1, this.holeY);
+           successors.add(toAdd);
+       }
+       // swap to north/up
+       if (holeY > 0) {
+            SlidingGame toAdd = this.swap(this.holeX , this.holeY, this.holeX, this.holeY - 1);
+           successors.add(toAdd);
+       }
+       //swap to right
+       if (holeX < N - 1) {
+           SlidingGame toAdd = this.swap(this.holeX , this.holeY, this.holeX + 1, this.holeY);
+           successors.add(toAdd);
+       }
+       //swap to down/south
+       if (holeY < N - 1) {
+           SlidingGame toAdd = this.swap(this.holeX , this.holeY, this.holeX, this.holeY + 1);
+           successors.add(toAdd);
+       }
+       return successors;
+   }
+    
+    public int getPriority() {
+        int priority = 0;
+        int elementValue = 0;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                priority += elementValue - this.board[j][i] ;
+                elementValue++;
+            }
+        }
+        return priority;
+    }
+    
+    @Override
     public int compareTo(Configuration g) {
-        throw new UnsupportedOperationException("compareTo : not supported yet.");
+        int priority;
+        if (!(g instanceof SlidingGame)) {
+            throw new RuntimeException("Object Type mismatch");
+        } else {
+            priority = this.getPriority() - ((SlidingGame) g).getPriority();
+            }
+        return priority;
     }
 
     @Override
     public Configuration parent() {
-        throw new UnsupportedOperationException("parent : not supported yet.");
+        return this.parent;
     }
+
+    @Override
+    public List<Configuration> pathFromRoot() {
+        List<Configuration> path = new ArrayList<>();
+        path.add(this);
+        SlidingGame aParent = this.parent;
+        while ( aParent != null) {
+            path.add(aParent);
+            aParent = aParent.parent;
+        }
+        Collections.reverse(path);
+        return path;
+    }
+    
+    
 
 }
