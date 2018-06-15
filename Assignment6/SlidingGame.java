@@ -144,27 +144,29 @@ public class SlidingGame implements Configuration {
        return successors;
    }
     
-    public int getPriority() {
-        int priority = 0;
-        int elementValue = 0;
+    public int getManhattanDistance() {
+        int distance = 0;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                priority += elementValue - this.board[j][i] ;
-                elementValue++;
+                int element = board[j][i];
+                int targetX = (element - 1 ) % N;
+                int targetY = (element - 1) / N;
+                distance += Math.abs(j - targetX);
+                distance += Math.abs(i - targetY);
             }
         }
-        return priority;
+        return distance;
     }
     
     @Override
     public int compareTo(Configuration g) {
-        int priority;
+        int distance;
         if (!(g instanceof SlidingGame)) {
             throw new RuntimeException("Object Type mismatch");
         } else {
-            priority = this.getPriority() - ((SlidingGame) g).getPriority();
+            distance = this.getManhattanDistance()- ((SlidingGame) g).getManhattanDistance();
             }
-        return priority;
+        return distance;
     }
 
     @Override
@@ -183,6 +185,17 @@ public class SlidingGame implements Configuration {
         }
         Collections.reverse(path);
         return path;
+    }
+    
+    @Override
+    public int hashCode(){
+        int value = 0;
+        for(int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                value += this.board[j][i] * Math.pow(31, j+i * N);
+            }
+        }
+        return value;
     }
     
     

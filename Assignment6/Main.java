@@ -12,7 +12,7 @@ Laurens Kubat       s4626249
 public class Main
 {
     public static void main(String[] args) {
-        int [] game = {1,2,3, 4,5,8, 7,9,6};
+        int [] game = {2,1,4, 8,3,6, 9,5,7};
 
         SlidingGame s = new SlidingGame (game);
         System.out.println(s);

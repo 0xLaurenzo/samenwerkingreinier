@@ -17,8 +17,10 @@ public class Solver
 
     public Solver( Configuration g ) {
         this.toExamine = new PriorityQueue<>();
-        this.seen= new ArrayList<>();
-        toExamine.add(g);
+        this.seen = new HashSet<>();
+        this.toExamine.add(g);
+        this.seen.add(g);
+        
     }
 
     /**
@@ -30,6 +32,10 @@ public class Solver
         while ( ! toExamine.isEmpty() ) {
             Configuration next = toExamine.remove();
             if ( next.isSolution() ) {
+                List<Configuration> a = next.pathFromRoot();
+                for (int i = 0; i < a.size(); i++) {
+                    System.out.println(a.get(i).toString());
+                }
                 return "Success! \n" + next.toString();
             } else {
                 for ( Configuration succ : next.successors() ) {
