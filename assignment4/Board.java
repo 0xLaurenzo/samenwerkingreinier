@@ -32,6 +32,14 @@ public class Board {
         }
     }
     
+    private void setCord(int x, int y){
+        if (player1Turn) {
+            board[y][x] = player1.getColor();
+        } else {
+            board[y][x] = player2.getColor();
+        }
+    }
+    
     public void setPlayer1(Player player) {
         this.player1 = player;
     }
@@ -40,22 +48,19 @@ public class Board {
         this.player2 = player;
     }
     
-    public void play(int col, int row) {
-        if (!board[col][row].equals(" ")) {
-            System.out.println("That spot isn't empty!\n");
-        } else {
+    public void play() {
             if (player1Turn) {
-                board[col][row] = player1.getColor();
+                board[player1.getY()][player1.getX()] = player1.getColor();
                 player1Turn = false;
                 movesUsed++;
-                System.out.println("\n" + player1.getColor() +  "'s turn.");
+                System.out.println("\n" + player2.getColor() +  "'s turn.");
             } else {
-                board[col][row] = player2.getColor();
+                board[player2.getY()][player2.getX()] = player2.getColor();
                 player1Turn = true;
                 movesUsed++;
-                System.out.println("\n" + player2.getColor() +  "'s turn.");
+                System.out.println("\n" + player1.getColor() +  "'s turn.");
             }
-        }
+            System.out.println(this.toString());
     }
     
     public boolean winning() {

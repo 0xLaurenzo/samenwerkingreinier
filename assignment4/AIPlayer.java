@@ -15,7 +15,7 @@ public class AIPlayer implements Player {
     }
 
     @Override
-    public void play(int x_cord, int y_cord) {
+    public void play() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -16,12 +16,34 @@ public class HumanPlayer implements Player {
     private String color;
     
     public HumanPlayer(){
+    }
+    
+    public int getX() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter the x cord and press return (between 1 and 3)");
+        int xcord = scan.nextInt();
+        if (xcord > 0 && xcord < 4) {
+            return xcord-1;
+        } else {
+            System.out.println("make sure it is 1, 2 or 3");
+            return getY();
+        }
+    }
+    
+    public int getY() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter the y cord and press return (between 1 and 3)");
+        int ycord = scan.nextInt();
+        if (ycord > 0 && ycord < 4) {
+            return ycord-1;
+        } else {
+            System.out.println("make sure it is 1, 2 or 3");
+            return getY();
+        }
         
     }
-    @Override
-    public void play(int x_cord, int y_cord) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
+    
 
 
     @Override

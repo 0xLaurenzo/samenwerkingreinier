@@ -20,7 +20,7 @@ public class TicTacToe {
     public void play(){
         setPlayers();
         while(!board.winning()) {
-            
+            board.play(); 
         }
     }
     
