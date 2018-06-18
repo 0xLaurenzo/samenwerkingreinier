@@ -19,14 +19,10 @@ public class HumanPlayer implements Player {
         
     }
     @Override
-    public void play() {
+    public void play(int x_cord, int y_cord) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void makeMove(int x_cord, int y_cord) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public String getName() {
@@ -50,7 +46,15 @@ public class HumanPlayer implements Player {
     }
 
     public void getColorFromUser(){
-        
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter the players symbol (X/O)");
+        String color = scan.nextLine();
+        if (color != ("X") || color != ("O")){
+            System.out.println("Please enter only an X or O");
+            getColorFromUser();
+            } else {
+                setColor(color);
+            }
     }
     
     @Override

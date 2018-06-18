@@ -11,8 +11,7 @@ package assignment4;
  * @author  Reinier Sanders s4335422
  */
 public interface Player {
-    public void play();
-    public void makeMove(int x_cord, int y_cord);
+    public void play(int x_cord, int y_cord);
     public String getName();
     public void setName(String name);
     public String getColor();
