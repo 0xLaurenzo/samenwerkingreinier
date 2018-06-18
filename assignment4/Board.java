@@ -32,6 +32,10 @@ public class Board {
         }
     }
     
+    public boolean getPlayer1Turn() {
+        return this.player1Turn;
+    }
+    
     private void setCord(int x, int y){
         if (player1Turn) {
             board[y][x] = player1.getColor();
@@ -50,15 +54,15 @@ public class Board {
     
     public void play() {
             if (player1Turn) {
+                System.out.println("\n" + player1.getName() +  "'s turn.");
                 board[player1.getY()][player1.getX()] = player1.getColor();
                 player1Turn = false;
                 movesUsed++;
-                System.out.println("\n" + player2.getColor() +  "'s turn.");
             } else {
+                System.out.println("\n" + player2.getName() +  "'s turn.");
                 board[player2.getY()][player2.getX()] = player2.getColor();
                 player1Turn = true;
                 movesUsed++;
-                System.out.println("\n" + player1.getColor() +  "'s turn.");
             }
             System.out.println(this.toString());
     }
@@ -72,9 +76,9 @@ public class Board {
                     && !board[1][row].equals(" ")
                     && !board[2][row].equals(" ")) {
                 if(!player1Turn)
-                    System.out.println("X wins!");
+                    System.out.println(player1.getName()+ " wins!");
                 else
-                    System.out.println("O wins!");
+                    System.out.println(player2.getName()+ " wins!");
                 return true;
             }
         }
@@ -86,9 +90,9 @@ public class Board {
                     && !board[col][1].equals(" ")
                     && !board[col][2].equals(" ")) {
                 if(!player1Turn)
-                    System.out.println("X wins!");
+                    System.out.println(player1.getName()+ " wins!");
                 else
-                    System.out.println("O wins!");
+                    System.out.println(player2.getName()+ " wins!");
                 return true;
             }
         }
@@ -99,10 +103,10 @@ public class Board {
                 && !board[1][1].equals(" ")
                 && !board[2][2].equals(" ")) {
             if(!player1Turn)
-                    System.out.println("X wins!");
+                    System.out.println(player1.getName()+ " wins!");
                 else
-                    System.out.println("O wins!");
-            return true;
+                    System.out.println(player2.getName()+ " wins!");
+                return true;
         }
         // Check if bottomleft to topright diagonal has won.
         if(board[2][0].equals(board[1][1]) &&
@@ -111,10 +115,10 @@ public class Board {
                 && !board[1][1].equals(" ")
                 && !board[0][2].equals(" ")) {
             if(!player1Turn)
-                    System.out.println("X wins!");
+                    System.out.println(player1.getName()+ " wins!");
                 else
-                    System.out.println("O wins!");
-            return true;
+                    System.out.println(player2.getName()+ " wins!");
+                return true;
         }
         // Check if draw.
         if(movesUsed == 9) {

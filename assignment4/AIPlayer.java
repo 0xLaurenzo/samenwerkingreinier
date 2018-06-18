@@ -8,7 +8,7 @@ package assignment4;
 /**
  *
  * @author Laurens
- */
+ *
 public class AIPlayer implements Player {
 
     public AIPlayer() {
@@ -40,3 +40,4 @@ public class AIPlayer implements Player {
     }
     
 }
+*/

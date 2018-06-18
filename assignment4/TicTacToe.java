@@ -22,11 +22,17 @@ public class TicTacToe {
         while(!board.winning()) {
             board.play(); 
         }
+        if (board.getPlayer1Turn()) {
+            System.out.println("Player 2 Won!");
+        } else {
+            System.out.println("Player 1 Won!");
+        }
     }
     
     public void setPlayers() {
         setPlayer1();
-        setPlayer2();           
+        setPlayer2(); 
+        
     }
     
     public void setPlayer1() {

@@ -16,6 +16,8 @@ public class HumanPlayer implements Player {
     private String color;
     
     public HumanPlayer(){
+        getNameFromUser();
+        getColorFromUser();
     }
     
     public int getX() {
@@ -70,13 +72,13 @@ public class HumanPlayer implements Player {
     public void getColorFromUser(){
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter the players symbol (X/O)");
-        String color = scan.nextLine();
-        if (color != ("X") || color != ("O")){
-            System.out.println("Please enter only an X or O");
-            getColorFromUser();
-            } else {
-                setColor(color);
-            }
+        String color = Character.toString(scan.next().charAt(0));
+        switch (color) {
+            case "X" :  setColor("X"); break;
+            case "O" :  setColor("O"); break;
+            default  :  System.out.println("Please enter only an X or O");
+                        getColorFromUser();
+        }
     }
     
     @Override
