@@ -5,16 +5,19 @@
  */
 package assignment4;
 
+import java.io.IOException;
+
 /**
  *
- * @author Laurens
+ * @author  Laurens Kubat   s4626249
+ * @author  Reinier Sanders s4335422
  */
 public class Assignment4 {
-
+    
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         TicTacToe game = new TicTacToe();
         game.play();
     }
