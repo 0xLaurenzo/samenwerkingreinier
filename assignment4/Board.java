@@ -6,22 +6,21 @@
 package assignment4;
 
 /**
- * @author Reinier Sanders  s4335422
- * @author Laurens Kubat    s4626249
+ *
+ * @author  Laurens Kubat   s4626249
+ * @author  Reinier Sanders s4335422
  */
 public class Board {
     private final int size = 3;
-    private String board[][];
+    private final String board[][];
     private Player player1;
     private Player player2;
-    private int movesUsed;
     private boolean player1Turn;
     
     public Board() {
         this.board = new String[size][size];
         setBoard(board);
         this.player1Turn = true;
-        this.movesUsed = 0;
     }
     
     private void setBoard(String board[][]) {
@@ -32,37 +31,44 @@ public class Board {
         }
     }
     
-    public boolean getPlayer1Turn() {
-        return this.player1Turn;
-    }
-    
-    private void setCord(int x, int y){
-        if (player1Turn) {
-            board[y][x] = player1.getColor();
-        } else {
-            board[y][x] = player2.getColor();
-        }
-    }
-    
     public void setPlayer1(Player player) {
         this.player1 = player;
     }
     
     public void setPlayer2(Player player) {
         this.player2 = player;
+        System.out.println("\n" + this.player1.getName() +  "'s turn.");
     }
     
     public void play() {
             if (player1Turn) {
-                System.out.println("\n" + player1.getName() +  "'s turn.");
-                board[player1.getY()][player1.getX()] = player1.getColor();
-                player1Turn = false;
-                movesUsed++;
+                int x = player1.getX();
+                int y = player1.getY();
+                if (player1 instanceof HumanPlayer && !board[x][y].equals(" ")) {
+                    System.out.println("That spot isn't empty!\n");
+                    System.out.println(this.toString());
+                    return;
+                } else if(!board[x][y].equals(" ")) {
+                    return;
+                } else {
+                    board[x][y] = player1.getColor();
+                    player1Turn = false;
+                    System.out.println("\n" + player2.getName() +  "'s turn.");
+                }
             } else {
-                System.out.println("\n" + player2.getName() +  "'s turn.");
-                board[player2.getY()][player2.getX()] = player2.getColor();
-                player1Turn = true;
-                movesUsed++;
+                int x = player2.getX();
+                int y = player2.getY();
+                if (player2 instanceof HumanPlayer && !board[x][y].equals(" ")) {
+                    System.out.println("That spot isn't empty!\n");
+                    System.out.println(this.toString());
+                    return;
+                } else if(!board[x][y].equals(" ")) {
+                    return;
+                } else {
+                    board[x][y] = player2.getColor();
+                    player1Turn = true;
+                    System.out.println("\n" + player1.getName() +  "'s turn.");
+                }
             }
             System.out.println(this.toString());
     }
@@ -76,9 +82,9 @@ public class Board {
                     && !board[1][row].equals(" ")
                     && !board[2][row].equals(" ")) {
                 if(!player1Turn)
-                    System.out.println(player1.getName()+ " wins!");
+                    System.out.println(player1.getName() + " wins!");
                 else
-                    System.out.println(player2.getName()+ " wins!");
+                    System.out.println(player2.getName() + " wins!");
                 return true;
             }
         }
@@ -90,9 +96,9 @@ public class Board {
                     && !board[col][1].equals(" ")
                     && !board[col][2].equals(" ")) {
                 if(!player1Turn)
-                    System.out.println(player1.getName()+ " wins!");
+                    System.out.println(player1.getName() + " wins!");
                 else
-                    System.out.println(player2.getName()+ " wins!");
+                    System.out.println(player2.getName() + " wins!");
                 return true;
             }
         }
@@ -103,10 +109,10 @@ public class Board {
                 && !board[1][1].equals(" ")
                 && !board[2][2].equals(" ")) {
             if(!player1Turn)
-                    System.out.println(player1.getName()+ " wins!");
+                    System.out.println(player1.getName() + " wins!");
                 else
-                    System.out.println(player2.getName()+ " wins!");
-                return true;
+                    System.out.println(player2.getName() + " wins!");
+            return true;
         }
         // Check if bottomleft to topright diagonal has won.
         if(board[2][0].equals(board[1][1]) &&
@@ -115,17 +121,30 @@ public class Board {
                 && !board[1][1].equals(" ")
                 && !board[0][2].equals(" ")) {
             if(!player1Turn)
-                    System.out.println(player1.getName()+ " wins!");
+                    System.out.println(player1.getName() + " wins!");
                 else
-                    System.out.println(player2.getName()+ " wins!");
-                return true;
-        }
-        // Check if draw.
-        if(movesUsed == 9) {
-            System.out.println("It's a draw!");
+                    System.out.println(player2.getName() + " wins!");
             return true;
         }
+        // Check if draw.
+        if(isFull()) {
+            return false;
+        }
         return false;
+    }
+    
+    private boolean isFull() {
+        for(int row = 0; row < size; row++) {
+            for(int col = 0; col < size; col++) {
+                if(board[col][row].equals(" "))
+                    return false;
+            }
+        }
+        return true;
+    }
+    
+    public Board getBoard() {
+        return this;
     }
     
     @Override
@@ -145,6 +164,7 @@ public class Board {
                 out += "-----\n";
             }
         }
+        out+= "\n";
         return out;
     }
 }
