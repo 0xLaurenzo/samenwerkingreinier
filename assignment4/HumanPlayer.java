@@ -9,7 +9,8 @@ import java.util.Scanner;
 
 /**
  *
- * @author Laurens
+ * @author  Laurens Kubat   s4626249
+ * @author  Reinier Sanders s4335422
  */
 public class HumanPlayer implements Player {
     private String name;
@@ -20,6 +21,7 @@ public class HumanPlayer implements Player {
         getColorFromUser();
     }
     
+    @Override
     public int getX() {
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter the x cord and press return (between 1 and 3)");
@@ -32,6 +34,7 @@ public class HumanPlayer implements Player {
         }
     }
     
+    @Override
     public int getY() {
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter the y cord and press return (between 1 and 3)");
@@ -44,19 +47,10 @@ public class HumanPlayer implements Player {
         }
         
     }
-    
-    
-
 
     @Override
     public String getName() {
         return this.name;
-    }
-    
-    public void getNameFromUser(){
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Enter the player's name");
-        setName(scan.nextLine());
     }
 
     @Override
@@ -68,22 +62,27 @@ public class HumanPlayer implements Player {
     public String getColor() {
         return this.color;
     }
-
-    public void getColorFromUser(){
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Enter the players symbol (X/O)");
-        String color = Character.toString(scan.next().charAt(0));
-        switch (color) {
-            case "X" :  setColor("X"); break;
-            case "O" :  setColor("O"); break;
-            default  :  System.out.println("Please enter only an X or O");
-                        getColorFromUser();
-        }
-    }
     
     @Override
     public void setColor(String color) {
         this.color = color;
+    }
+        
+    public void getNameFromUser(){
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter the player's name");
+        setName(scan.nextLine());
+    }
+    
+    public void getColorFromUser(){
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter " + name + "'s symbol (X/O)");
+        String color = Character.toString(scan.next().charAt(0));
+        switch(color) {
+            case "X" : setColor("X"); break;
+            case "O" : setColor("O"); break;
+            default : System.out.println("Please enter only X or O"); getColorFromUser();
+        }
     }
     
 }
