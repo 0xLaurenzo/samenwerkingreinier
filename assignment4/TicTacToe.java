@@ -9,10 +9,12 @@ import java.util.Scanner;
 
 /**
  *
- * @author Laurens
+ * @author  Laurens Kubat   s4626249
+ * @author  Reinier Sanders s4335422
  */
 public class TicTacToe {
     private Board board;
+    
     public TicTacToe (){
         this.board = new Board();
     }
@@ -22,17 +24,12 @@ public class TicTacToe {
         while(!board.winning()) {
             board.play(); 
         }
-        if (board.getPlayer1Turn()) {
-            System.out.println("Player 2 Won!");
-        } else {
-            System.out.println("Player 1 Won!");
-        }
     }
     
     public void setPlayers() {
         setPlayer1();
-        setPlayer2(); 
-        
+        setPlayer2();  
+        System.out.println(board.toString());
     }
     
     public void setPlayer1() {
